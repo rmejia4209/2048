@@ -1,0 +1,28 @@
+# IDE
+.vscode/*
+!.vscode/extensions.json
+
+# Environment
+.venv
+.env
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Other
+.DS_Store
+__pycache__
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+dist
+dist-ssr
+*.local
+foo.py
+notes.md
