@@ -1,6 +1,5 @@
 
 import './App.css'
-import Grid from './components/Grid'
 import Tiles from './components/Tiles'
 
 function App() {
