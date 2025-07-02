@@ -5,6 +5,7 @@ import StatBlock from './components/ScoreStat'
 import Tiles from './components/Tiles'
 import Undo from "./components/UndoButton";
 
+import Title from "./components/Title";
 import type { Game } from "./game/game";
 import { initGame } from "./game/game";
 
@@ -26,25 +27,28 @@ function App() {
   }
 
   return (
-    <>
+    <div className="flex flex-col justify-center min-h-screen">
       <div className="flex flex-row gap-4 items-center mb-8">
-        <h1>2048</h1>
+        <Title />
         <StatBlock label={"Score"} value={gameState.score}/>
         <StatBlock label={"Best"} value={101}/>
       </div>
+
       <div className="flex flex-row gap-4 items-center mb-8">
         <p>Game introduction here</p>
         <button>New Game</button>
       </div>
+
       <Tiles
         gameState={gameState}
         changeGameState={changeGameState}
         updatePrevStates={updatePrevStates}
       />
-      <div className="flex flex-row gap-4 items-center mb-8">
+
+      <div className="flex justify-center flex-row gap-4 items-center mb-8">
         <Undo onClick={undoMove}/>
       </div>
-    </>
+    </div>
   )
 }
 

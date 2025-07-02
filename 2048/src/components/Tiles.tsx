@@ -43,28 +43,39 @@ function Tiles(
     return () => clearTimeout(timeOutId);
   }, [gameState])
 
-  
+  /*
+
+  */
 
   return (
-      <div className='relative'>
-      <div className={
-        `grid grid-cols-4 gap-4 rounded-md border-[1rem]
-        bg-neutral-500 border-neutral-500`
-      }>
-        {Array.from({ length: 16 }, (_, idx) => (
-          <div key={idx} className="bg-neutral-400 rounded-md size-24"></div>
-        ))}
-      </div>
-      <div>
-        {gameState.board.flat().sort((a, b) => a.id - b.id).map((tile) => (
-          <Tile
-            key={tile.id}
-            row={tile.row}
-            col={tile.col}
-            value={tile.value}/>
-        ))}
+    <div className="w-full overflow-x-auto">
+      <div className='relative w-max mx-auto'>
+        <div className={
+          `grid grid-cols-4 rounded-2xl gap-2 border-[0.5rem]
+          bg-neutral-500 border-neutral-500`
+        }>
+          {Array.from({ length: 16 }, (_, idx) => (
+            <div
+              key={idx}
+              className="bg-neutral-400 rounded-2xl size-16 xs:size-24"
+            >
+            </div>
+          ))}
+        </div>
+        <div>
+          {gameState.board.flat().sort((a, b) => a.id - b.id).map((tile) => (
+            <Tile
+              key={tile.id}
+              row={tile.row}
+              col={tile.col}
+              value={tile.value}/>
+          ))}
+        </div>
+
       </div>
     </div>
+    
+
   )
 }
 
