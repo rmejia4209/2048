@@ -1,5 +1,5 @@
 
-import { randInt, flatMap } from "../utils/utils";
+import { randInt, flatMap, deepCopy } from "../utils/utils";
 
 interface Tile {
   id: number;
@@ -9,7 +9,7 @@ interface Tile {
 }
 
 export type Board = Tile[][];
-export type Game = {board: Board, score: number}
+export type Game = { board: Board; score: number; turn: number}
 type Coordinates = [number, number][]
 
 
@@ -80,7 +80,7 @@ export function initGame(size: number = 4): Game {
       id: ((4*row) + col), value: 0, row: row, col: col
     }))
   ));
-  const game: Game = {board: board, score: 0};
+  const game: Game = {board: board, score: 0, turn: 0};
   addRandomTile(board, 2);
   addRandomTile(board, 2);
 
@@ -188,13 +188,18 @@ function merge(key: string, board: Board): number {
   return score;
 }
 
-export function move(key: string, game: Game): boolean {
+export function move(key: string, currentState: Game): Game {
   let numMoves = 0;
   let score = 0;
-  numMoves += slide(key, game.board);
-  score += merge(key, game.board);
-  numMoves += slide(key, game.board);
-  game.score += score
-  if (numMoves > 0 || score > 0) addRandomTile(game.board);
-  return (numMoves > 0 ? true : false);
+  const nextGameState = deepCopy(currentState);
+  numMoves += slide(key, nextGameState.board);
+  score += merge(key, nextGameState.board);
+  numMoves += slide(key, nextGameState.board);
+  nextGameState.score += score
+  if (numMoves > 0 || score > 0) {
+    addRandomTile(nextGameState.board)
+    nextGameState.turn += 1;
+    return nextGameState
+  };
+  return currentState;
 }

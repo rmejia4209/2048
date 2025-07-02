@@ -3,41 +3,43 @@ import Tile from "./Tile";
 
 import type { Game } from "../game/game";
 import { move } from "../game/game";
-import { deepCopy } from "../utils/utils";
 
 interface TilesPropTypes {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>;
+  updatePrevStates: (currentState: Game) => void;
 }
 
 function Tiles(
-  {gameState, changeGameState}: TilesPropTypes
+  {gameState, changeGameState, updatePrevStates}: TilesPropTypes
 ): React.JSX.Element {
 
   const limitInput = useRef(false);
+  const prevGameState = useRef(gameState)
 
 
   useEffect(() => {
     const handleUserInput = (e: KeyboardEvent) => {
       const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
       if (acceptedKeys.includes(e.key) && !limitInput.current) {
-        changeGameState((prev) => {
-          const nextGameState = deepCopy(prev);
-          limitInput.current = move(e.key, nextGameState);
-          return nextGameState;
-        });
+        changeGameState((prev) => move(e.key, prev));
+        }
       }
-    }
 
     window.addEventListener("keydown", handleUserInput);
     return () => window.removeEventListener("keydown", handleUserInput)
   }, [])
 
   useEffect(() => {
-    if (!limitInput.current) return;
-    const timeOutId = setTimeout(() => (limitInput.current = false), 300);
-    return () => clearTimeout(timeOutId);
 
+    console.log()
+
+    if (prevGameState.current.turn === gameState.turn) return;
+    updatePrevStates(prevGameState.current);
+    limitInput.current = true;
+    prevGameState.current = gameState;
+    const timeOutId = setTimeout(() => (limitInput.current = false), 1000);
+    return () => clearTimeout(timeOutId);
   }, [gameState])
 
   
