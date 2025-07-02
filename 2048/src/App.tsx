@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 import './App.css'
 import StatBlock from './components/ScoreStat'
@@ -20,6 +20,11 @@ function App() {
     if (prevStates.current.length === 5) prevStates.current.shift();
   }
 
+  const undoMove = () => {
+    const lastState = prevStates.current.pop()
+    if (lastState) changeGameState(lastState);
+  }
+
   return (
     <>
       <div className="flex flex-row gap-4 items-center mb-8">
@@ -37,7 +42,7 @@ function App() {
         updatePrevStates={updatePrevStates}
       />
       <div className="flex flex-row gap-4 items-center mb-8">
-        <Undo/>
+        <Undo onClick={undoMove}/>
       </div>
     </>
   )

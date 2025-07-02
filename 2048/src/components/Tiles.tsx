@@ -31,14 +31,15 @@ function Tiles(
   }, [])
 
   useEffect(() => {
-
-    console.log()
-
-    if (prevGameState.current.turn === gameState.turn) return;
+    
+    if (prevGameState.current.turn >= gameState.turn) {
+      prevGameState.current = gameState;
+      return;
+    }
     updatePrevStates(prevGameState.current);
     limitInput.current = true;
     prevGameState.current = gameState;
-    const timeOutId = setTimeout(() => (limitInput.current = false), 1000);
+    const timeOutId = setTimeout(() => (limitInput.current = false), 300);
     return () => clearTimeout(timeOutId);
   }, [gameState])
 
