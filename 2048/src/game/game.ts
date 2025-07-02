@@ -177,7 +177,6 @@ function merge(key: string, board: Board): number {
           board[mergeTile[0].row][mergeTile[0].col], board[row][col]
         )
         board[mergeTile[0].row][mergeTile[0].col].value *= 2;
-        console.log(`+${board[mergeTile[0].row][mergeTile[0].col].value}`);
         score += board[mergeTile[0].row][mergeTile[0].col].value
         board[row][col].value = 0;
         mergeTile.length = 0;

@@ -26,7 +26,6 @@ function Tiles(
           limitInput.current = move(e.key, nextGameState);
           return nextGameState;
         });
-        console.log(`limint input set to: ${limitInput.current}`)
       }
     }
 
@@ -36,12 +35,7 @@ function Tiles(
 
   useEffect(() => {
     if (!limitInput.current) return;
-    
-    const timeOutId = setTimeout(() => {
-      limitInput.current = false;
-      console.log(`limit input set to: ${limitInput.current}`)
-
-    }, 300);
+    const timeOutId = setTimeout(() => (limitInput.current = false), 300);
     return () => clearTimeout(timeOutId);
 
   }, [gameState])
@@ -55,7 +49,7 @@ function Tiles(
         bg-neutral-500 border-neutral-500`
       }>
         {Array.from({ length: 16 }, (_, idx) => (
-          <div key={idx} className="bg-neutral-400 rounded-sm size-24"></div>
+          <div key={idx} className="bg-neutral-400 rounded-md size-24"></div>
         ))}
       </div>
       <div>

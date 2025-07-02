@@ -58,8 +58,9 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
 
   useEffect(() => {
     if (value === prev.current) return;
-    else if (prev.current === 0) {
 
+    // Scale tile from 0% to 100% after a 150ms delay
+    else if (prev.current === 0) {
       const startAnimation = setTimeout(() => {
         setIsAnimating(true)
       }, animationDuration)
@@ -73,6 +74,7 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
       }
     }
 
+    // Scale tile to 125% for 150ms
     else {
       setIsAnimating(true);
       const stopAnimation = setTimeout(() => {
@@ -87,7 +89,7 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
   return (
     <div
       className={`
-        absolute top-${4*(7*row+1)} left-${4*(7*col+1)} size-24 rounded-sm
+        absolute top-${4*(7*row+1)} left-${4*(7*col+1)} size-24 rounded-md
         transition-all duration-${animationDuration} ease-in-out
         ${isAnimating && value > 0
           ? "scale-125"
