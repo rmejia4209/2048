@@ -1,41 +1,32 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Tile from "./Tile";
 
-import { initGame, move, addRandomTile, isGameOver } from "../game/game";
+import type { Game } from "../game/game";
+import { move } from "../game/game";
 import { deepCopy } from "../utils/utils";
 
-function Tiles(): React.JSX.Element {
+interface TilesPropTypes {
+  gameState: Game;
+  changeGameState: React.Dispatch<React.SetStateAction<Game>>;
+}
 
-  const [gameState, changeGameState] = useState(initGame)
-  const [prevState, setPrevState] = useState(gameState);
-  const [didMove, setDidMove] = useState(false);
+function Tiles(
+  {gameState, changeGameState}: TilesPropTypes
+): React.JSX.Element {
+
   const limitInput = useRef(false);
-
-  const undoMove = () => {
-    changeGameState((currentState) => {
-      setPrevState(currentState);
-      return prevState;
-    });    
-  }
-  
 
 
   useEffect(() => {
     const handleUserInput = (e: KeyboardEvent) => {
-
       const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
       if (acceptedKeys.includes(e.key) && !limitInput.current) {
-        
         changeGameState((prev) => {
-          const nextGameState = deepCopy(prev)
-          const moved = move(e.key, nextGameState);
-          if (moved) {
-            limitInput.current = true
-            setDidMove(moved);
-            setPrevState(prev);
-          }
+          const nextGameState = deepCopy(prev);
+          limitInput.current = move(e.key, nextGameState);
           return nextGameState;
         });
+        console.log(`limint input set to: ${limitInput.current}`)
       }
     }
 
@@ -43,26 +34,17 @@ function Tiles(): React.JSX.Element {
     return () => window.removeEventListener("keydown", handleUserInput)
   }, [])
 
-
   useEffect(() => {
-
-    if (!didMove) return;
-
-    const timeoutId = setTimeout(() => {
-      setDidMove(false);
-      changeGameState((prev) => {
-        const finalState = deepCopy(prev);
-        addRandomTile(finalState);
-        if (isGameOver(finalState)) console.log("GAME OVER");
-        return finalState;
-      });
+    if (!limitInput.current) return;
+    
+    const timeOutId = setTimeout(() => {
       limitInput.current = false;
-    }, 150);
+      console.log(`limit input set to: ${limitInput.current}`)
 
-    return () => clearTimeout(timeoutId)
+    }, 300);
+    return () => clearTimeout(timeOutId);
 
-  }, [didMove])
-
+  }, [gameState])
 
   
 
@@ -77,18 +59,13 @@ function Tiles(): React.JSX.Element {
         ))}
       </div>
       <div>
-        {gameState.flat().sort((a, b) => a.id - b.id).map((tile) => (
+        {gameState.board.flat().sort((a, b) => a.id - b.id).map((tile) => (
           <Tile
             key={tile.id}
             row={tile.row}
             col={tile.col}
             value={tile.value}/>
         ))}
-      </div>
-      
-      <div>
-        <button onClick={undoMove}>Undo</button>
-        <button onClick={undoMove}>Redo</button>
       </div>
     </div>
   )

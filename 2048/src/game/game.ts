@@ -8,7 +8,8 @@ interface Tile {
   col: number
 }
 
-type Board = Tile[][];
+export type Board = Tile[][];
+export type Game = {board: Board, score: number}
 type Coordinates = [number, number][]
 
 
@@ -72,18 +73,17 @@ export function addRandomTile(board:Board, value?: number): void {
   }
   
 
-export function initGame(size: number = 4):Board {
+export function initGame(size: number = 4): Game {
 
-  console.log("Inside of init games")
-
-  const game: Board = Array.from({ length: size }, (_, row) => (
+  const board: Board = Array.from({ length: size }, (_, row) => (
     Array.from({ length: size}, (_, col) => ({
       id: ((4*row) + col), value: 0, row: row, col: col
     }))
-  ))
-  
-  addRandomTile(game, 2);
-  addRandomTile(game, 2);
+  ));
+  const game: Game = {board: board, score: 0};
+  addRandomTile(board, 2);
+  addRandomTile(board, 2);
+
 
   /*
   for (let i = 8; i<132000; i *= 2) {
@@ -164,10 +164,10 @@ function slide(key: string, board: Board): number {
   return numSwaps;
 }
 
-function merge(key: string, board: Board) {
+function merge(key: string, board: Board): number {
 
   let mergeTile: {row: number; col: number; tile: Tile}[] = []
-  let numSwaps = 0;
+  let score = 0;
   for (const [row, col] of getRowAndCol(key, board.length, mergeTile)) {
     const tile = board[row][col];
 
@@ -177,22 +177,25 @@ function merge(key: string, board: Board) {
           board[mergeTile[0].row][mergeTile[0].col], board[row][col]
         )
         board[mergeTile[0].row][mergeTile[0].col].value *= 2;
+        console.log(`+${board[mergeTile[0].row][mergeTile[0].col].value}`);
+        score += board[mergeTile[0].row][mergeTile[0].col].value
         board[row][col].value = 0;
         mergeTile.length = 0;
-        numSwaps++
       } else {
         mergeTile[0] = {row: row, col: col, tile: tile};
       }
     }
   }
-  return numSwaps;
+  return score;
 }
 
-export function move(key: string, board: Board): boolean {
+export function move(key: string, game: Game): boolean {
   let numMoves = 0;
-  numMoves += slide(key, board);
-  numMoves += merge(key, board);
-  numMoves += slide(key, board);
-  console.log(`Inside move: ${numMoves}`)
-  return numMoves ? true: false;
+  let score = 0;
+  numMoves += slide(key, game.board);
+  score += merge(key, game.board);
+  numMoves += slide(key, game.board);
+  game.score += score
+  if (numMoves > 0 || score > 0) addRandomTile(game.board);
+  return (numMoves > 0 ? true : false);
 }

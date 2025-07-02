@@ -11,9 +11,9 @@ interface TilePropsTypes {
 
 function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
 
-  const [isNew, setIsNew] = useState(true);
-  const prevVal = useRef(value);
-
+  const [isAnimating, setIsAnimating] = useState(false);
+  const animationDuration = 150;  // ms
+  const prev = useRef(0)
     const determineColor = (value: number) => {
       switch (value) {
         case 2:
@@ -55,33 +55,49 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
       }
     }
 
+
   useEffect(() => {
-    if (prevVal.current !== value) {
-      prevVal.current = value;
-      setIsNew(true);
+    if (value === prev.current) return;
+    else if (prev.current === 0) {
+
+      const startAnimation = setTimeout(() => {
+        setIsAnimating(true)
+      }, animationDuration)
+      const stopAnimation = setTimeout(() => {
+        prev.current = value;
+        setIsAnimating(false);
+      }, animationDuration * 2)
+      return () => {
+        clearInterval(startAnimation);
+        clearInterval(stopAnimation);
+      }
     }
+
+    else {
+      setIsAnimating(true);
+      const stopAnimation = setTimeout(() => {
+        prev.current = value;
+        setIsAnimating(false);
+      }, animationDuration)
+      return () => clearInterval(stopAnimation)
+    }
+
   }, [value])
-
-  useEffect(() => {
-    const stopAnimation = setTimeout(() => {
-      if (isNew) setIsNew(false);
-    }, 100);
-
-    return () => clearInterval(stopAnimation)
-
-  }, [isNew])
 
   return (
     <div
       className={`
         absolute top-${4*(7*row+1)} left-${4*(7*col+1)} size-24 rounded-sm
-        transition-all duration-100 ease-in-out
-        ${value ? (isNew ? 'scale-125': "") : 'hidden'}
+        transition-all duration-${animationDuration} ease-in-out
+        ${isAnimating && value > 0
+          ? "scale-125"
+          : (prev.current === 0 ? "scale-0" : "scale-100")
+        }
         ${determineColor(value)}
          font-bold text-center leading-24
       `}
-    > {value}
-      
+    >
+      {value ? value : ""}
     </div>
   )
 }
