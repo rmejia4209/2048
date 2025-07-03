@@ -90,7 +90,7 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
     <div
       className={`
         absolute top-${18*row+2} left-${18*col+2} xs:top-${26*row+2} xs:left-${26*col+2} 
-        size-16 xs:size-24 rounded-md
+        size-16 xs:size-24 rounded-2xl
         transition-all duration-${animationDuration} ease-in-out
         ${isAnimating && value > 0
           ? "scale-125"

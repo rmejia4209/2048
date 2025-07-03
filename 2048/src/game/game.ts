@@ -81,16 +81,8 @@ export function initGame(size: number = 4): Game {
     }))
   ));
   const game: Game = {board: board, score: 0, turn: 0};
-  //addRandomTile(board, 2);
-  //addRandomTile(board, 2);
-
-
-  
-  for (let i = 8; i<132000; i *= 2) {
-    addRandomTile(game.board, i);
-    console.log(i);
-  }
-
+  addRandomTile(board, 2);
+  addRandomTile(board, 2);
   return game;
 }
 

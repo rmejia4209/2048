@@ -1,11 +1,9 @@
 import { useState, useRef } from "react";
 
-import './App.css'
-import StatBlock from './components/ScoreStat'
 import Tiles from './components/Tiles'
 import Undo from "./components/UndoButton";
 
-import Title from "./components/Title";
+import GameHeader from "./components/GameHeader";
 import type { Game } from "./game/game";
 import { initGame } from "./game/game";
 
@@ -21,6 +19,11 @@ function App() {
     if (prevStates.current.length === 5) prevStates.current.shift();
   }
 
+  const resetGame = () => {
+    changeGameState(initGame());
+    prevStates.current = [];
+  }
+
   const undoMove = () => {
     const lastState = prevStates.current.pop()
     if (lastState) changeGameState(lastState);
@@ -28,17 +31,7 @@ function App() {
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
-      <div className="flex flex-row gap-4 items-center mb-8">
-        <Title />
-        <StatBlock label={"Score"} value={gameState.score}/>
-        <StatBlock label={"Best"} value={101}/>
-      </div>
-
-      <div className="flex flex-row gap-4 items-center mb-8">
-        <p>Game introduction here</p>
-        <button>New Game</button>
-      </div>
-
+      <GameHeader score={gameState.score} resetGame={resetGame}/>
       <Tiles
         gameState={gameState}
         changeGameState={changeGameState}
