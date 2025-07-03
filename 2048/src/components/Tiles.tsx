@@ -43,9 +43,6 @@ function Tiles(
     return () => clearTimeout(timeOutId);
   }, [gameState])
 
-  /*
-
-  */
 
   return (
     <div className="w-full overflow-x-auto">

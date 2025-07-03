@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 
-import Tiles from './components/Tiles'
-import Undo from "./components/UndoButton";
-
 import GameHeader from "./components/GameHeader";
+import Tiles from './components/Tiles'
+import PowerUpContainer from "./components/PowerUps";
+
 import type { Game } from "./game/game";
 import { initGame } from "./game/game";
 
@@ -37,7 +37,7 @@ function App(): React.JSX.Element {
         changeGameState={changeGameState}
         updatePrevStates={updatePrevStates}
       />
-      <Undo onClick={undoMove}/>
+      <PowerUpContainer onClick={undoMove} />
     </div>
   )
 }
