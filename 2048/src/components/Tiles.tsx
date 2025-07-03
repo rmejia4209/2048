@@ -7,15 +7,20 @@ import { move } from "../game/game";
 interface TilesPropTypes {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>;
-  updatePrevStates: (currentState: Game) => void;
+  prevStates: React.RefObject<Game[]>
 }
 
 function Tiles(
-  {gameState, changeGameState, updatePrevStates}: TilesPropTypes
+  {gameState, changeGameState, prevStates}: TilesPropTypes
 ): React.JSX.Element {
 
   const limitInput = useRef(false);
-  const prevGameState = useRef(gameState)
+  const prevGameState = useRef(gameState);
+
+  const updatePrevStates = (currentState: Game) => {
+    prevStates.current.push(currentState);
+    if (prevStates.current.length === 5) prevStates.current.shift();
+  }
 
 
   useEffect(() => {

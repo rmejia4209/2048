@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 import GameHeader from "./components/GameHeader";
 import Tiles from './components/Tiles'
-import PowerUpContainer from "./components/PowerUps";
+import PowerUpContainer from "./components/PowerUpContainer";
 
 import type { Game } from "./game/game";
 import { initGame } from "./game/game";
@@ -14,16 +14,6 @@ function App(): React.JSX.Element {
   const [gameState, changeGameState] = useState(initGame);
   const prevStates = useRef<Game[]>([]);
 
-  const updatePrevStates = (currentState: Game) => {
-    prevStates.current.push(currentState);
-    if (prevStates.current.length === 5) prevStates.current.shift();
-  }
-
-  const resetGame = () => {
-    changeGameState(initGame());
-    prevStates.current = [];
-  }
-
   const undoMove = () => {
     const lastState = prevStates.current.pop()
     if (lastState) changeGameState(lastState);
@@ -31,11 +21,17 @@ function App(): React.JSX.Element {
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
-      <GameHeader score={gameState.score} resetGame={resetGame}/>
+      <GameHeader
+        score={gameState.score}
+        resetGame={() => {
+          changeGameState(initGame());
+          prevStates.current = [];
+        }}
+      />
       <Tiles
         gameState={gameState}
         changeGameState={changeGameState}
-        updatePrevStates={updatePrevStates}
+        prevStates={prevStates}
       />
       <PowerUpContainer onClick={undoMove} />
     </div>
