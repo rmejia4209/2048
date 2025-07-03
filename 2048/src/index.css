@@ -3,6 +3,8 @@
 @source inline("top-{2,20,38,56}");
 @source inline("xs:left-{2,28,54,80}");
 @source inline("xs:top-{2,28,54,80}");
+@source inline("xl:left-{4,38,72,106}");
+@source inline("xl:top-{4,38,72,106}");
 @theme {
   --breakpoint-xs: 32rem;
 }

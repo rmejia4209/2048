@@ -8,8 +8,7 @@ import type { Game } from "./game/game";
 import { initGame } from "./game/game";
 
 
-function App() {
-
+function App(): React.JSX.Element {
 
   const [gameState, changeGameState] = useState(initGame);
   const prevStates = useRef<Game[]>([]);

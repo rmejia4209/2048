@@ -75,6 +75,7 @@ export function addRandomTile(board:Board, value?: number): void {
 
 export function initGame(size: number = 4): Game {
 
+  // 2**(2+(4*row+col))
   const board: Board = Array.from({ length: size }, (_, row) => (
     Array.from({ length: size}, (_, col) => ({
       id: ((4*row) + col), value: 0, row: row, col: col
