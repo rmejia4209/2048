@@ -9,7 +9,7 @@ interface Tile {
 }
 
 export type Board = Tile[][];
-export type Game = { board: Board; score: number; turn: number}
+export type Game = { board: Board; score: number; turn: number }[];
 type Coordinates = [number, number][]
 
 
@@ -81,9 +81,10 @@ export function initGame(size: number = 4): Game {
       id: ((4*row) + col), value: 0, row: row, col: col
     }))
   ));
-  const game: Game = {board: board, score: 0, turn: 0};
   addRandomTile(board, 2);
   addRandomTile(board, 2);
+  const game: Game = [{board: board, score: 0, turn: 0}];
+  
   return game;
 }
 
@@ -181,18 +182,23 @@ function merge(key: string, board: Board): number {
   return score;
 }
 
-export function move(key: string, currentState: Game): Game {
+export function move(key: string, game: Game): Game {
   let numMoves = 0;
   let score = 0;
-  const nextGameState = deepCopy(currentState);
-  numMoves += slide(key, nextGameState.board);
-  score += merge(key, nextGameState.board);
-  numMoves += slide(key, nextGameState.board);
-  nextGameState.score += score
+  const gameCopy = deepCopy(game);
+  const nextState = deepCopy(gameCopy[gameCopy.length - 1])
+
+
+  numMoves += slide(key, nextState.board);
+  score += merge(key, nextState.board);
+  numMoves += slide(key, nextState.board);
+  nextState.score += score
   if (numMoves > 0 || score > 0) {
-    addRandomTile(nextGameState.board)
-    nextGameState.turn += 1;
-    return nextGameState
+    addRandomTile(nextState.board);
+    nextState.turn += 1;
+    gameCopy.push(nextState);
+    if (gameCopy.length === 5) gameCopy.shift();
+    return gameCopy;
   };
-  return currentState;
+  return game;
 }

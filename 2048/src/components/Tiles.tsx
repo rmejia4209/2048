@@ -7,20 +7,13 @@ import { move } from "../game/game";
 interface TilesPropTypes {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>;
-  prevStates: React.RefObject<Game[]>
 }
 
 function Tiles(
-  {gameState, changeGameState, prevStates}: TilesPropTypes
+  {gameState, changeGameState}: TilesPropTypes
 ): React.JSX.Element {
 
   const limitInput = useRef(false);
-  const prevGameState = useRef(gameState);
-
-  const updatePrevStates = (currentState: Game) => {
-    prevStates.current.push(currentState);
-    if (prevStates.current.length === 5) prevStates.current.shift();
-  }
 
 
   useEffect(() => {
@@ -36,14 +29,7 @@ function Tiles(
   }, [])
 
   useEffect(() => {
-    
-    if (prevGameState.current.turn >= gameState.turn) {
-      prevGameState.current = gameState;
-      return;
-    }
-    updatePrevStates(prevGameState.current);
     limitInput.current = true;
-    prevGameState.current = gameState;
     const timeOutId = setTimeout(() => (limitInput.current = false), 300);
     return () => clearTimeout(timeOutId);
   }, [gameState])
@@ -67,13 +53,15 @@ function Tiles(
           ))}
         </div>
         <div>
-          {gameState.board.flat().sort((a, b) => a.id - b.id).map((tile) => (
-            <Tile
-              key={tile.id}
-              row={tile.row}
-              col={tile.col}
-              value={tile.value}/>
-          ))}
+          {gameState[gameState.length - 1].board.flat().sort(
+            (a, b) => a.id - b.id).map((tile) => (
+              <Tile
+                key={tile.id}
+                row={tile.row}
+                col={tile.col}
+                value={tile.value}/>
+            )
+          )}
         </div>
 
       </div>

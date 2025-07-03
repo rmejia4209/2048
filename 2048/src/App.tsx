@@ -1,10 +1,9 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 import GameHeader from "./components/GameHeader";
 import Tiles from './components/Tiles'
 import PowerUpContainer from "./components/PowerUpContainer";
 
-import type { Game } from "./game/game";
 import { initGame } from "./game/game";
 
 // TODO - accessiblity features
@@ -12,28 +11,21 @@ import { initGame } from "./game/game";
 function App(): React.JSX.Element {
 
   const [gameState, changeGameState] = useState(initGame);
-  const prevStates = useRef<Game[]>([]);
-
-  const undoMove = () => {
-    const lastState = prevStates.current.pop()
-    if (lastState) changeGameState(lastState);
-  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
       <GameHeader
-        score={gameState.score}
-        resetGame={() => {
-          changeGameState(initGame());
-          prevStates.current = [];
-        }}
+        score={gameState[gameState.length - 1].score}
+        resetGame={() => changeGameState(initGame())}
       />
       <Tiles
         gameState={gameState}
         changeGameState={changeGameState}
-        prevStates={prevStates}
       />
-      <PowerUpContainer onClick={undoMove} />
+      <PowerUpContainer
+        gameState={gameState}
+        changeGameState={changeGameState}
+      />
     </div>
   )
 }
