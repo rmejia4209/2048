@@ -7,6 +7,7 @@ import GameHeader from "./components/GameHeader";
 import type { Game } from "./game/game";
 import { initGame } from "./game/game";
 
+// TODO - accessiblity features
 
 function App(): React.JSX.Element {
 
@@ -36,10 +37,7 @@ function App(): React.JSX.Element {
         changeGameState={changeGameState}
         updatePrevStates={updatePrevStates}
       />
-
-      <div className="flex justify-center flex-row gap-4 items-center mb-8">
-        <Undo onClick={undoMove}/>
-      </div>
+      <Undo onClick={undoMove}/>
     </div>
   )
 }
