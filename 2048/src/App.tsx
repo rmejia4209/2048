@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import GameHeader from "./components/GameHeader";
-import Tiles from './components/Tiles'
+import GameContainer from './components/Game'
 import PowerUpContainer from "./components/PowerUpContainer";
 
 import { initGame } from "./game/game";
@@ -18,7 +18,7 @@ function App(): React.JSX.Element {
         score={gameState[gameState.length - 1].score}
         resetGame={() => changeGameState(initGame())}
       />
-      <Tiles
+      <GameContainer
         gameState={gameState}
         changeGameState={changeGameState}
       />
