@@ -16,7 +16,7 @@ export type Board = Tile[][];
 export type Game = {
   board: Board; score: number; turn: number; powerups: PowerUps
 }[];
-type Coordinates = [number, number][]
+type Coordinates = [number, number]
 
 
 export function printBoard(board: Board): void {
@@ -46,21 +46,25 @@ function swapTiles(a: Tile, b: Tile) {
   [a.value, b.value] = [b.value, a.value];
 }
 
-function getEmptyTiles(board:Board): Coordinates {
+function getFirstEmptyTile(board:Board, order: number[]): Coordinates {
 
-  const emptyTiles: Coordinates = []
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board.length; col++) {
-      if (board[row][col].value === 0) emptyTiles.push([row, col]);
+  const sortedTiles = board.flat().map((t) => t).sort((a, b) => a.id - b.id)
+
+  for (const target of order) {
+    if (sortedTiles[target].value === 0) {
+      return [sortedTiles[target].row, sortedTiles[target].col]
     }
   }
-  return emptyTiles;
+  // TODO handle undefined return gracefully
+  return [-1, -1]
 }
 
 
 export function isGameOver(board: Board) {
 
-  if (getEmptyTiles(board).length > 0) return false;
+  const emptyTiles = board.flat().filter((t) => t.value === 0);
+
+  if (emptyTiles.length > 0) return false;
   
   const matchesAvailable = flatMap(board, (tile, _) => (
     hasMatchingNeighbors(tile, board)
@@ -70,25 +74,26 @@ export function isGameOver(board: Board) {
   return true
 }
 
-export function addRandomTile(board:Board, value?: number): void {
-
-  const emptyTiles: Coordinates = getEmptyTiles(board);
-  const [row, col] = emptyTiles[randInt(0, emptyTiles.length)];
-  board[row][col].value = value ? value : randInt(1, 3) * 2;
-  return; 
+function addTile(
+  board:Board, value: number, preferredOrder: number[]
+): void {
+    const [row, col] = getFirstEmptyTile(board, preferredOrder)
+    board[row][col].value = value;
+    return; 
   }
   
 
-export function initGame(size: number = 4): Game {
+export function initGame(preferredOrder: number[]): Game {
 
   // 2**(2+(4*row+col))
+  const size = 4
   const board: Board = Array.from({ length: size }, (_, row) => (
     Array.from({ length: size}, (_, col) => ({
       id: ((4*row) + col), value: 0, row: row, col: col
     }))
   ));
-  addRandomTile(board, 2);
-  addRandomTile(board, 2);
+  addTile(board, 2, preferredOrder);
+  addTile(board, 2, preferredOrder.slice(1));
   const powerups: PowerUps = {undos: 0}
   const game: Game = [{board: board, score: 0, turn: 0, powerups: powerups}];
   
@@ -201,7 +206,9 @@ function merge(key: string, board: Board, powerups: PowerUps): number {
   return score;
 }
 
-export function move(key: string, game: Game): Game {
+export function move(
+  key: string, game: Game, val: number, preferredOrder: number[]
+): Game {
   console.log("In move")
   const startTime = performance.now();
   let numMoves = 0;
@@ -215,7 +222,7 @@ export function move(key: string, game: Game): Game {
   numMoves += slide(key, nextState.board);
   nextState.score += score
   if (numMoves > 0 || score > 0) {
-    addRandomTile(nextState.board);
+    addTile(nextState.board, val, preferredOrder);
     nextState.turn += 1;
     gameCopy.push(nextState);
     if (gameCopy.length === 5) gameCopy.shift();

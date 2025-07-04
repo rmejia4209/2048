@@ -47,7 +47,9 @@ function GameHeader(
         xs:w-96 xs:gap-4 xl:w-136 xl:gap-64 
       `}>
         <div>
-          <h1 className="text-4xl xs:text-6xl font-extrabold text-stone-100">2048</h1>
+          <h1 className="text-4xl xs:text-6xl font-extrabold text-stone-100">
+            2048
+          </h1>
           <p className="text-sm text-stone-300 leading-snug mt-1">
             Join the numbers and get to the 2048 tile!
           </p>

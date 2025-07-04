@@ -5,18 +5,27 @@ import GameContainer from './components/Game'
 import PowerUpContainer from "./components/PowerUpContainer";
 
 import { initGame } from "./game/game";
+import { shuffle } from "./utils/utils";
 
 // TODO - accessiblity features
 
 function App(): React.JSX.Element {
 
-  const [gameState, changeGameState] = useState(initGame);
+  const preferredOrder = shuffle(Array.from({length: 16}, (_, i) => i));
+  const [gameState, changeGameState] = useState(
+    () => initGame(preferredOrder)
+  );
+
+  const resetGame = () => {
+    const preferredOrder = shuffle(Array.from({length: 16}, (_, i) => i));
+    changeGameState(() => initGame(preferredOrder))
+  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
       <GameHeader
         score={gameState[gameState.length - 1].score}
-        resetGame={() => changeGameState(initGame())}
+        resetGame={resetGame}
       />
       <GameContainer
         gameState={gameState}

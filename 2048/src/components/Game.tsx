@@ -4,6 +4,7 @@ import Tiles from "./Tiles";
 
 import type { Game } from "../game/game";
 import { move } from "../game/game";
+import { randInt, shuffle } from "../utils/utils";
 
 interface GameContainerPropTypes {
   gameState: Game;
@@ -23,7 +24,9 @@ function GameContainer(
       const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
       if (acceptedKeys.includes(e.key) && !limitInput.current) {
         console.log("In useEffect - scheduling move")
-        changeGameState((prev) => move(e.key, prev));
+        const val = randInt(1, 3) * 2;
+        const preferredOrder = shuffle(Array.from({length: 16}, (_, i) => i));
+        changeGameState((prev) => move(e.key, prev, val, preferredOrder));
         }
       }
 
