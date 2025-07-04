@@ -60,8 +60,9 @@ function getFirstEmptyTile(board:Board, order: number[]): Coordinates {
 }
 
 
-export function isGameOver(board: Board) {
+export function isGameOver(game: Game) {
 
+  const board = game[game.length - 1].board;
   const emptyTiles = board.flat().filter((t) => t.value === 0);
 
   if (emptyTiles.length > 0) return false;
@@ -89,11 +90,11 @@ export function initGame(preferredOrder: number[]): Game {
   const size = 4
   const board: Board = Array.from({ length: size }, (_, row) => (
     Array.from({ length: size}, (_, col) => ({
-      id: ((4*row) + col), value: 0, row: row, col: col
+      id: ((4*row) + col), value: row === 0 && col === 0 ? 0 : 2**((4*row+col)) , row: row, col: col
     }))
   ));
-  addTile(board, 2, preferredOrder);
-  addTile(board, 2, preferredOrder.slice(1));
+  //addTile(board, 2, preferredOrder);
+  //addTile(board, 2, preferredOrder.slice(1));
   const powerups: PowerUps = {undos: 0}
   const game: Game = [{board: board, score: 0, turn: 0, powerups: powerups}];
   

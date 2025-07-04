@@ -40,8 +40,6 @@ function PowerUP(
       </button>
       <Uses numOfUses={uses}/>
     </div>
-
-
   );
 }
 

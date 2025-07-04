@@ -18,6 +18,7 @@ function UndoButton(
   const numUndos = gameState[gameState.length - 1].powerups.undos
   const undo = () => {
     let numberUndos = gameState[gameState.length - 1].powerups.undos;
+    let currentTurn = gameState[gameState.length - 1].turn;
     if (gameState.length > 1 && numberUndos > 0) {
       changeGameState((prev) => {
         const nextState = deepCopy(prev);
@@ -25,6 +26,7 @@ function UndoButton(
         nextState[nextState.length - 1].powerups.undos = (
           (numberUndos - 1) as 0 | 1
         );
+        nextState[nextState.length - 1].turn = currentTurn;
         return nextState;
       });
     }
