@@ -3,7 +3,7 @@
 
 import UndoButton from "./UndoButton";
 
-import type { Game } from "../game/game";
+import type { Game } from "../game/types";
 
 
 interface PowerUpContainerPropTypes {

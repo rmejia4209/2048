@@ -1,5 +1,5 @@
 import UndoIcon from "./icons/UndoIcon";
-
+import type { PowerUpUsageStats as PowerUpUsageStatsType } from "../game/types";
 
 function Uses({ numUses }: { numUses: number }): React.JSX.Element {
 
@@ -25,7 +25,7 @@ function PowerUPStat(
   return (
     numUses > 0
       ? (
-        <div className="relative mt-6">
+        <div className="relative my-2">
           <div
           className={`
             flex items-center justify-center size-10 xs:size-12 xl:size-14 
@@ -43,12 +43,12 @@ function PowerUPStat(
 }
 
 
-export default function PowerUpUsageStats({}): React.JSX.Element {
+
+
+export default function PowerUpUsageStats({stats}: {stats: PowerUpUsageStatsType}): React.JSX.Element {
   return (
     <div className="flex flex-row gap-6">
-      <PowerUPStat Icon={UndoIcon} numUses={0}/>
-      <PowerUPStat Icon={UndoIcon} numUses={0}/>
-      <PowerUPStat Icon={UndoIcon} numUses={0}/>
+      <PowerUPStat Icon={UndoIcon} numUses={stats.undos}/>
     </div>
   )
 }

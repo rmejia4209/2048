@@ -1,6 +1,6 @@
 
 import Tile from "./Tile"
-import type { Game } from "../game/game"
+import type { Game } from "../game/types";
 
 function Tiles({ gameState }: {gameState: Game}) {
 

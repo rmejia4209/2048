@@ -1,23 +1,6 @@
 
 import { flatMap, deepCopy } from "../utils/utils";
-
-type Tile = {
-  id: number;
-  value: number;
-  row: number
-  col: number
-}
-
-type PowerUps = {
-  undos: 0 | 1 | 2;
-}
-
-export type Board = Tile[][];
-export type Game = {
-  board: Board; score: number; turn: number; powerups: PowerUps
-}[];
-type Coordinates = [number, number]
-
+import type { Board, Tile, Coordinates, Game, PowerUps } from "./types";
 
 export function printBoard(board: Board): void {
   for (const row of board) {
@@ -60,19 +43,18 @@ function getFirstEmptyTile(board:Board, order: number[]): Coordinates {
 }
 
 
-export function isGameOver(game: Game) {
+export function isGameOver(game: Game): void {
 
   const board = game[game.length - 1].board;
   const emptyTiles = board.flat().filter((t) => t.value === 0);
 
-  if (emptyTiles.length > 0) return false;
+  if (emptyTiles.length > 0) return;
   
   const matchesAvailable = flatMap(board, (tile, _) => (
     hasMatchingNeighbors(tile, board)
   )).some(t => t);
-  if (matchesAvailable) return false;
-
-  return true
+  if (matchesAvailable) return;
+  game.at(-1)!.isGameOver = true;
 }
 
 function addTile(
@@ -86,17 +68,24 @@ function addTile(
 
 export function initGame(preferredOrder: number[]): Game {
 
-  // 2**(2+(4*row+col))
+  // row === 0 && col === 0 ? 0 : 2**((4*row+col))
   const size = 4
   const board: Board = Array.from({ length: size }, (_, row) => (
     Array.from({ length: size}, (_, col) => ({
-      id: ((4*row) + col), value: row === 0 && col === 0 ? 0 : 2**((4*row+col)) , row: row, col: col
+      id: ((4*row) + col), value: 0, row: row, col: col
     }))
   ));
-  //addTile(board, 2, preferredOrder);
-  //addTile(board, 2, preferredOrder.slice(1));
+  addTile(board, 2, preferredOrder);
+  addTile(board, 2, preferredOrder.slice(1));
   const powerups: PowerUps = {undos: 0}
-  const game: Game = [{board: board, score: 0, turn: 0, powerups: powerups}];
+  const game: Game = [{
+    board: board,
+    score: 0,
+    turn: 0,
+    powerups: powerups,
+    isGameOver: false,
+    powerUpUsage: {undos: 0}
+  }];
   
   return game;
 }
@@ -207,10 +196,19 @@ function merge(key: string, board: Board, powerups: PowerUps): number {
   return score;
 }
 
+
+/**
+ *  Performance: 0 to 1 ms
+ * 
+ * @param key 
+ * @param game 
+ * @param val 
+ * @param preferredOrder 
+ * @returns 
+ */
 export function move(
   key: string, game: Game, val: number, preferredOrder: number[]
 ): Game {
-  const startTime = performance.now();
   let numMoves = 0;
   let score = 0;
   const gameCopy = deepCopy(game);
@@ -224,10 +222,9 @@ export function move(
     addTile(nextState.board, val, preferredOrder);
     nextState.turn += 1;
     gameCopy.push(nextState);
+    isGameOver(gameCopy)
     if (gameCopy.length === 5) gameCopy.shift();
-    console.log(`Change: ${performance.now() - startTime}ms`)
     return gameCopy;
   };
-  console.log(`No Change: ${performance.now() - startTime}ms`)
   return game;
 }

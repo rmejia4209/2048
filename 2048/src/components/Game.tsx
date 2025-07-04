@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import Background from "./Background";
 import Tiles from "./Tiles";
 
-import type { Game } from "../game/game";
+import type { Game } from "../game/types";
 import { move } from "../game/game";
 import { randInt, shuffledArray } from "../utils/utils";
 
@@ -20,7 +20,6 @@ function GameContainer(
 
   useEffect(() => {
     const handleUserInput = (e: KeyboardEvent) => {
-      console.log("key", e.key, "repeat", e.repeat);
       const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
       if (acceptedKeys.includes(e.key) && !limitInput.current) {
         const val = randInt(1, 3) * 2;
@@ -35,6 +34,7 @@ function GameContainer(
 
   useEffect(() => {
     limitInput.current = true;
+    if (gameState[gameState.length - 1].isGameOver) return;
     const timeOutId = setTimeout(() => (limitInput.current = false), 300);
     return () => clearTimeout(timeOutId);
   }, [gameState])
@@ -42,7 +42,19 @@ function GameContainer(
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className='relative w-max mx-auto'>
+      <div
+        className={`
+          relative w-max mx-auto transition-all duration-800 ease-in-out
+          ${gameState.at(-1)!.isGameOver
+            ? (`
+              before:absolute before:inset-0 before:bg-neutral-800
+              before:opacity-40 before:z-10 scale-85 xs:scale-90 origin-top
+            `)
+            : "scale-100"
+          }
+
+        `}
+      >
         <Background/>
         <Tiles gameState={gameState}/>
       </div>
