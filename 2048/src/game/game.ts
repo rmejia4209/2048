@@ -55,7 +55,7 @@ function getFirstEmptyTile(board:Board, order: number[]): Coordinates {
       return [sortedTiles[target].row, sortedTiles[target].col]
     }
   }
-  // TODO handle undefined return gracefully
+  // TODO handle undefined return gracefully (should always be safe)
   return [-1, -1]
 }
 
@@ -209,13 +209,11 @@ function merge(key: string, board: Board, powerups: PowerUps): number {
 export function move(
   key: string, game: Game, val: number, preferredOrder: number[]
 ): Game {
-  console.log("In move")
   const startTime = performance.now();
   let numMoves = 0;
   let score = 0;
   const gameCopy = deepCopy(game);
   const nextState = deepCopy(gameCopy[gameCopy.length - 1])
-
 
   numMoves += slide(key, nextState.board);
   score += merge(key, nextState.board, nextState.powerups);

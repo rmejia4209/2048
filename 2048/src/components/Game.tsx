@@ -23,7 +23,6 @@ function GameContainer(
       console.log("key", e.key, "repeat", e.repeat);
       const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
       if (acceptedKeys.includes(e.key) && !limitInput.current) {
-        console.log("In useEffect - scheduling move")
         const val = randInt(1, 3) * 2;
         const preferredOrder = shuffledArray(16);
         changeGameState((prev) => move(e.key, prev, val, preferredOrder));
