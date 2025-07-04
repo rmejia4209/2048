@@ -4,7 +4,6 @@
 import UndoButton from "./UndoButton";
 
 import type { Game } from "../game/game";
-import { deepCopy } from "../utils/utils";
 
 
 interface PowerUpContainerPropTypes {

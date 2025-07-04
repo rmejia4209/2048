@@ -14,14 +14,28 @@ export function shuffle(arr: any[]) {
 }
 
 
-// TODO fix possible errors
-// Actually, work on making a range, and then combine with shuffle for randRange
-// to replace shuffle(Array.from({length: 16}, (_, i) => i))
-function range(a: number, b?: number, step: number = 1): number[] {
-  const arr: number[] = [];
-  //const min = b !== undefined 
+/**
+ * Returns an array of the given length with each value equal to it's index
+ * 
+ * @param len - length of the array
+ * @returns a shuffled array of number
+ */
+function simpleRange(len: number): number[] {
+  return Array.from({length: len}, (_, idx) => idx);
+}
 
-  return arr;
+
+ 
+/**
+ * Returns an array composed of values from 0 to len - 1
+ * and shuffled randomly
+ * 
+ * @param len length of the array
+ * @returns a shuffled array of number
+ */
+export function shuffledArray(len: number): number[] {
+  const arr = simpleRange(len);
+  return shuffle(arr)
 }
 
 export function deepCopy<T>(arg: T): T {

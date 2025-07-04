@@ -1,5 +1,5 @@
 
-import { randInt, flatMap, deepCopy } from "../utils/utils";
+import { flatMap, deepCopy } from "../utils/utils";
 
 type Tile = {
   id: number;
