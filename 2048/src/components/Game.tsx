@@ -19,14 +19,16 @@ function GameContainer(
 
   useEffect(() => {
     const handleUserInput = (e: KeyboardEvent) => {
+      console.log("key", e.key, "repeat", e.repeat);
       const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
       if (acceptedKeys.includes(e.key) && !limitInput.current) {
+        console.log("In useEffect - scheduling move")
         changeGameState((prev) => move(e.key, prev));
         }
       }
 
     window.addEventListener("keydown", handleUserInput);
-    return () => window.removeEventListener("keydown", handleUserInput)
+    return () => window.removeEventListener("keydown", handleUserInput);
   }, [])
 
   useEffect(() => {

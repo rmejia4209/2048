@@ -1,15 +1,21 @@
 
 import { randInt, flatMap, deepCopy } from "../utils/utils";
 
-interface Tile {
+type Tile = {
   id: number;
   value: number;
   row: number
   col: number
 }
 
+type PowerUps = {
+  undos: 0 | 1 | 2;
+}
+
 export type Board = Tile[][];
-export type Game = { board: Board; score: number; turn: number }[];
+export type Game = {
+  board: Board; score: number; turn: number; powerups: PowerUps
+}[];
 type Coordinates = [number, number][]
 
 
@@ -83,7 +89,8 @@ export function initGame(size: number = 4): Game {
   ));
   addRandomTile(board, 2);
   addRandomTile(board, 2);
-  const game: Game = [{board: board, score: 0, turn: 0}];
+  const powerups: PowerUps = {undos: 0}
+  const game: Game = [{board: board, score: 0, turn: 0, powerups: powerups}];
   
   return game;
 }
@@ -138,6 +145,17 @@ function* getRowAndCol(
 }
 
 
+function addPowerUps(value: number, powerups: PowerUps): void {
+
+  switch (value) {
+    case 32:
+      powerups.undos += powerups.undos < 2 ? 1 : 0;
+      return;
+    default:
+      return;
+  }
+
+}
 
 function slide(key: string, board: Board): number {
 
@@ -158,7 +176,7 @@ function slide(key: string, board: Board): number {
   return numSwaps;
 }
 
-function merge(key: string, board: Board): number {
+function merge(key: string, board: Board, powerups: PowerUps): number {
 
   let mergeTile: {row: number; col: number; tile: Tile}[] = []
   let score = 0;
@@ -171,7 +189,8 @@ function merge(key: string, board: Board): number {
           board[mergeTile[0].row][mergeTile[0].col], board[row][col]
         )
         board[mergeTile[0].row][mergeTile[0].col].value *= 2;
-        score += board[mergeTile[0].row][mergeTile[0].col].value
+        score += board[mergeTile[0].row][mergeTile[0].col].value;
+        addPowerUps(board[mergeTile[0].row][mergeTile[0].col].value, powerups)
         board[row][col].value = 0;
         mergeTile.length = 0;
       } else {
@@ -183,6 +202,8 @@ function merge(key: string, board: Board): number {
 }
 
 export function move(key: string, game: Game): Game {
+  console.log("In move")
+  const startTime = performance.now();
   let numMoves = 0;
   let score = 0;
   const gameCopy = deepCopy(game);
@@ -190,7 +211,7 @@ export function move(key: string, game: Game): Game {
 
 
   numMoves += slide(key, nextState.board);
-  score += merge(key, nextState.board);
+  score += merge(key, nextState.board, nextState.powerups);
   numMoves += slide(key, nextState.board);
   nextState.score += score
   if (numMoves > 0 || score > 0) {
@@ -198,7 +219,9 @@ export function move(key: string, game: Game): Game {
     nextState.turn += 1;
     gameCopy.push(nextState);
     if (gameCopy.length === 5) gameCopy.shift();
+    console.log(`Change: ${performance.now() - startTime}ms`)
     return gameCopy;
   };
+  console.log(`No Change: ${performance.now() - startTime}ms`)
   return game;
 }
