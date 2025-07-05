@@ -46,7 +46,7 @@ function PowerUP({ Icon, uses, type, action }: PropTypes): React.JSX.Element {
         aria-label="Undo"
         disabled={uses === 0 ? true : false}
         className={`
-          flex items-center justify-center size-8 xs:size-12 xl:size-14 
+          flex items-center justify-center size-12 xs:size-12 xl:size-14 
           rounded-xl shadow-md shadow-black/30 transition-all duration-150
           ease-in-out focus:outline-none ${calcColorWay()}
         `}

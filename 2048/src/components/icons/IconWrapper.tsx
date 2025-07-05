@@ -8,7 +8,7 @@ function IconWrapper(
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      className={`size-6 stroke-2 xs:size-8 stroke-stone-100 ${fill}`}
+      className={`size-8 stroke-2 xs:size-8 stroke-stone-100 ${fill}`}
     >
       <Path/>
     </svg>
