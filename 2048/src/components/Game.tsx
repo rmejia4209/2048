@@ -48,7 +48,7 @@ function GameContainer(
           ${gameState.at(-1)!.isGameOver
             ? (`
               before:absolute before:inset-0 before:bg-neutral-800
-              before:opacity-40 before:z-10 scale-85 xs:scale-90 origin-top
+              before:opacity-40 before:z-10 scale-90 origin-top
             `)
             : "scale-100"
           }

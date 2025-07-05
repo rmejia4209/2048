@@ -2,10 +2,11 @@ import { useState } from "react";
 
 import GameHeader from "./components/GameHeader";
 import GameContainer from './components/Game'
-import PowerUpContainer from "./components/PowerUpContainer";
+import GameFooter from "./components/GameFooter";
 
 import { initGame } from "./game/game";
 import { shuffledArray } from "./utils/utils";
+
 
 // TODO - accessiblity features
 
@@ -36,9 +37,10 @@ function App(): React.JSX.Element {
         gameState={gameState}
         changeGameState={changeGameState}
       />
-      <PowerUpContainer
+      <GameFooter
         gameState={gameState}
         changeGameState={changeGameState}
+        resetGame={resetGame}
       />
     </div>
   )

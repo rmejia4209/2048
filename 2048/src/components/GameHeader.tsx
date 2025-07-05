@@ -16,8 +16,8 @@ function InGameHeader(
 ): React.JSX.Element {
   return (
     <div className={`
-      flex flex-row items-start w-72 mx-auto mb-4 gap-6
-      xs:w-96 xs:gap-4 xl:w-136 xl:gap-64 transition-all duration-800
+      flex flex-row items-start w-72 mx-auto mb-4 gap-6 xs:w-96 xs:gap-4
+       xl:w-136 xl:gap-64 transition-all duration-800 ease-in-out
       ${!isGameOver
         ? "opacity-100 max-h-40 scale-100"
         : "opacity-0 max-h-0 scale-0"

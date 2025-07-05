@@ -13,7 +13,7 @@ function Background(): React.JSX.Element {
         <div
           key={idx}
           className={`
-            bg-neutral-500 rounded-2xl size-16 xs:size-24 xl:size-30
+            bg-neutral-500 rounded-2xl size-20 xs:size-24 xl:size-30
             transition-all duration-100
           `}
         >

@@ -3,7 +3,7 @@ import PowerUP from "./base/PowerUp";
 import UndoIcon from "./icons/UndoIcon";
 
 import type { Game } from "../game/types";
-import { deepCopy } from "../utils/utils";
+import { undoMove } from "../game/game";
 
 
 interface UndoButtonPropTypes {
@@ -16,23 +16,14 @@ function UndoButton(
 ): React.JSX.Element {
 
   const numUndos = gameState[gameState.length - 1].powerups.undos
-  const undo = () => {
-    let numberUndos = gameState[gameState.length - 1].powerups.undos;
-    let currentTurn = gameState[gameState.length - 1].turn;
-    if (gameState.length > 1 && numberUndos > 0) {
-      changeGameState((prev) => {
-        const nextState = deepCopy(prev);
-        nextState.pop();
-        nextState[nextState.length - 1].powerups.undos = (
-          (numberUndos - 1) as 0 | 1
-        );
-        nextState[nextState.length - 1].turn = currentTurn;
-        return nextState;
-      });
-    }
-  }
 
-  return <PowerUP Icon={UndoIcon} uses={numUndos} action={undo}/>
+  return (
+    <PowerUP
+      Icon={UndoIcon}
+      uses={numUndos}
+      action={() => {changeGameState((prev) => undoMove(prev))}}
+    />
+  )
 }
 
 

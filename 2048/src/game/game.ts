@@ -77,14 +77,14 @@ export function initGame(preferredOrder: number[]): Game {
   ));
   addTile(board, 2, preferredOrder);
   addTile(board, 2, preferredOrder.slice(1));
-  const powerups: PowerUps = {undos: 0}
+  const powerups: PowerUps = {undos: 1}
   const game: Game = [{
     board: board,
     score: 0,
     turn: 0,
     powerups: powerups,
     isGameOver: false,
-    powerUpUsage: {undos: 0}
+    powerUpUsage: {undos: 1}
   }];
   
   return game;
@@ -222,9 +222,26 @@ export function move(
     addTile(nextState.board, val, preferredOrder);
     nextState.turn += 1;
     gameCopy.push(nextState);
-    isGameOver(gameCopy)
+    isGameOver(gameCopy);
+    nextState.isGameOver = true
     if (gameCopy.length === 5) gameCopy.shift();
     return gameCopy;
   };
   return game;
+}
+
+
+export function undoMove(game: Game): Game {
+  
+  let numberUndos = game.at(-1)!.powerups.undos;
+  let currentTurn = game.at(-1)!.turn;
+
+  if (game.length > 1 && numberUndos > 0) {
+    const nextState = deepCopy(game);
+    nextState.pop();
+    nextState.at(-1)!.powerups.undos = (numberUndos - 1) as 0 | 1
+    nextState.at(-1)!.turn = currentTurn
+    return nextState
+  }
+  return game
 }
