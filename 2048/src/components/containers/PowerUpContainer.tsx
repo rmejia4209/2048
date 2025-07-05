@@ -1,29 +1,32 @@
-import UndoButton from "../buttons/UndoButton";
-import RestartGameButton from "../buttons/RestartGameButton";
-import type { Game } from "../../game/types";
+import UndoButton from "@/components/buttons//UndoButton";
+import RestartGameButton from "@/components/buttons/RestartGameButton"
 
-/**
- * Not used right now
- */
-interface PowerUpContainerPropTypes {
+import type { Game } from "@/game/types";
+
+interface PropTypes {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>
+  resetGame?: () => void;
 }
 
+
 function PowerUpContainer(
-  { gameState, changeGameState }: PowerUpContainerPropTypes
+  { gameState, changeGameState, resetGame }: PropTypes
 ): React.JSX.Element {
   return (
     <div className={`
-      flex flex-row justify-center gap-4 items-center mt-4 bg-neutral-500
-      w-72 mx-auto xs:w-96 xl:w-136 rounded-2xl py-2
+      flex flex-row justify-center gap-4 items-start mt-4 bg-neutral-500
+      w-72 mx-auto xs:w-96 xl:w-136 rounded-2xl py-2 transition-all
+      duration-800 ease-in-out
+      ${!gameState.at(-1)!.isGameOver
+        ? "opacity-100 max-h-40 scale-100"
+        : "opacity-0 max-h-0 scale-0"
+      }
     `}>
       <UndoButton gameState={gameState} changeGameState={changeGameState}/>
-      <RestartGameButton/>
+      <RestartGameButton resetGame={resetGame!} />
     </div>
   );
 }
-
-console.log("PowerUpContainer")
 
 export default PowerUpContainer;
