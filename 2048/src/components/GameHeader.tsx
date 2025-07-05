@@ -1,6 +1,6 @@
 
 import Button from "./base/Button";
-import PowerUpUsageStats from "./PowerUpUsageStats";
+import PowerUpUsageStats from "./containers/PowerUpUsageStats";
 import StatBlock from "./base/StatBlock";
 
 import type {PowerUpUsageStats as PowerUpUsageStatsType} from "../game/types";

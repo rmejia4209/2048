@@ -1,6 +1,6 @@
 
 
-import UndoButton from "./UndoButton";
+import UndoButton from "./buttons/UndoButton";
 import Button from "./base/Button";
 
 import type { Game } from "../game/types";

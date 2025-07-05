@@ -1,5 +1,5 @@
-import UndoIcon from "./icons/UndoIcon";
-import type { PowerUpUsageStats as PowerUpUsageStatsType } from "../game/types";
+import UndoIcon from "../icons/UndoIcon";
+import type { PowerUpUsageStats as PowerUpUsageStatsType } from "../../game/types";
 
 function Uses({ numUses }: { numUses: number }): React.JSX.Element {
 

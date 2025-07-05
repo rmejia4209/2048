@@ -1,9 +1,9 @@
 
-import PowerUP from "./base/PowerUp";
-import UndoIcon from "./icons/UndoIcon";
+import PowerUP from "../base/PowerUp";
+import UndoIcon from "../icons/UndoIcon";
 
-import type { Game } from "../game/types";
-import { undoMove } from "../game/game";
+import type { Game } from "../../game/types";
+import { undoMove } from "../../game/game";
 
 
 interface UndoButtonPropTypes {
