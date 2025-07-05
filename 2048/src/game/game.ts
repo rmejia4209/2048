@@ -77,14 +77,14 @@ export function initGame(preferredOrder: number[]): Game {
   ));
   addTile(board, 2, preferredOrder);
   addTile(board, 2, preferredOrder.slice(1));
-  const powerups: PowerUps = {undos: 1}
+  const powerups: PowerUps = {undos: 0}
   const game: Game = [{
     board: board,
     score: 0,
     turn: 0,
     powerups: powerups,
     isGameOver: false,
-    powerUpUsage: {undos: 1}
+    powerUpUsage: {undos: 0}
   }];
   
   return game;
@@ -223,7 +223,6 @@ export function move(
     nextState.turn += 1;
     gameCopy.push(nextState);
     isGameOver(gameCopy);
-    nextState.isGameOver = true
     if (gameCopy.length === 5) gameCopy.shift();
     return gameCopy;
   };
