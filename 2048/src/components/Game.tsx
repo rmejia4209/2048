@@ -25,11 +25,20 @@ function GameContainer(
         const val = randInt(1, 3) * 2;
         const preferredOrder = shuffledArray(16);
         changeGameState((prev) => move(e.key, prev, val, preferredOrder));
-        }
       }
+    }
+    
+    const pauseInput = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      limitInput.current = customEvent.detail;
+    }
 
     window.addEventListener("keydown", handleUserInput);
-    return () => window.removeEventListener("keydown", handleUserInput);
+    window.addEventListener("pause-inputs", pauseInput);
+    return () => {
+      window.removeEventListener("keydown", handleUserInput);
+      window.removeEventListener("keydown", pauseInput);
+    }
   }, [])
 
   useEffect(() => {

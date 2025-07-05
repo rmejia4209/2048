@@ -1,11 +1,10 @@
-
-
-
 import UndoButton from "../buttons/UndoButton";
-
+import RestartGameButton from "../buttons/RestartGameButton";
 import type { Game } from "../../game/types";
 
-
+/**
+ * Not used right now
+ */
 interface PowerUpContainerPropTypes {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>
@@ -19,10 +18,12 @@ function PowerUpContainer(
       flex flex-row justify-center gap-4 items-center mt-4 bg-neutral-500
       w-72 mx-auto xs:w-96 xl:w-136 rounded-2xl py-2
     `}>
-      <UndoButton gameState={gameState} changeGameState={changeGameState}
-      />
+      <UndoButton gameState={gameState} changeGameState={changeGameState}/>
+      <RestartGameButton/>
     </div>
   );
 }
+
+console.log("PowerUpContainer")
 
 export default PowerUpContainer;

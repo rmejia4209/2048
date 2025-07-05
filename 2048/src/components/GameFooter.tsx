@@ -2,9 +2,13 @@
 
 import UndoButton from "./buttons/UndoButton";
 import Button from "./base/Button";
+import RestartGameButton from "./buttons/RestartGameButton";
 
 import type { Game } from "../game/types";
 import { undoMove } from "../game/game";
+import { shuffledArray } from "../utils/utils";
+import { initGame } from "../game/game";
+
 
 interface PropTypes {
   gameState: Game;
@@ -12,12 +16,13 @@ interface PropTypes {
   resetGame?: () => void;
 }
 
+
 function PowerUpContainer(
-  { gameState, changeGameState }: PropTypes
+  { gameState, changeGameState, resetGame }: PropTypes
 ): React.JSX.Element {
   return (
     <div className={`
-      flex flex-row justify-center gap-4 items-center mt-4 bg-neutral-500
+      flex flex-row justify-center gap-4 items-start mt-4 bg-neutral-500
       w-72 mx-auto xs:w-96 xl:w-136 rounded-2xl py-2 transition-all
       duration-800 ease-in-out
       ${!gameState.at(-1)!.isGameOver
@@ -26,8 +31,8 @@ function PowerUpContainer(
       }
 
     `}>
-      <UndoButton gameState={gameState} changeGameState={changeGameState}
-      />
+      <UndoButton gameState={gameState} changeGameState={changeGameState}/>
+      <RestartGameButton resetGame={resetGame!} />
     </div>
   );
 }
@@ -85,13 +90,20 @@ function GameOverFooter(
 }
 
 function GameFooter(
-  {gameState, changeGameState, resetGame}: PropTypes
+  {gameState, changeGameState}: PropTypes
 ): React.JSX.Element {
+
+    const resetGame = () => {
+      const preferredOrder = shuffledArray(16);
+      changeGameState(() => initGame(preferredOrder))
+    }
+
   return (
     <>
       <PowerUpContainer
         gameState={gameState}
         changeGameState={changeGameState}
+        resetGame={resetGame}
       />
       <GameOverFooter
         gameState={gameState}

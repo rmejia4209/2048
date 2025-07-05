@@ -4,7 +4,6 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import GameHeader from "./components/GameHeader";
 import GameContainer from './components/Game'
 import GameFooter from "./components/GameFooter";
-
 import { initGame } from "./game/game";
 import { shuffledArray } from "./utils/utils";
 
@@ -48,7 +47,6 @@ function App(): React.JSX.Element {
       <GameFooter
         gameState={gameState}
         changeGameState={changeGameState}
-        resetGame={resetGame}
       />
     </div>
   )
