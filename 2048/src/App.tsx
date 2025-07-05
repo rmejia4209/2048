@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 import GameHeader from "./components/GameHeader";
 import GameContainer from './components/Game'
@@ -13,22 +14,29 @@ import { shuffledArray } from "./utils/utils";
 function App(): React.JSX.Element {
 
   const preferredOrder = shuffledArray(16);
-  const [gameState, changeGameState] = useState(
+  const [bestScore, setBestScore] = useLocalStorage("best", 0);
+  const [gameState, changeGameState] = useLocalStorage("currentGame",
     () => initGame(preferredOrder)
   );
+  const currentFrame = gameState.at(-1)!;
 
   const resetGame = () => {
     const preferredOrder = shuffledArray(16);
     changeGameState(() => initGame(preferredOrder))
   }
 
-  const currentFrame = gameState.at(-1)!;
+  useEffect(() => {
+    const score = gameState.at(-1)!.score;
+    if (score > bestScore) setBestScore(score);
+  }, [gameState])
+
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
       <GameHeader
         isGameOver={currentFrame.isGameOver}
         score={currentFrame.score}
+        bestScore={bestScore}
         turns={currentFrame.turn}
         stats={currentFrame.powerUpUsage}
         resetGame={resetGame}

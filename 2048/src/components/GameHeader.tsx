@@ -7,12 +7,17 @@ import type {PowerUpUsageStats as PowerUpUsageStatsType} from "../game/types";
 
 
 
-interface InGameHeaderPropTypes {
-  isGameOver: boolean; score: number; resetGame: () => void;
+interface PropTypes {
+  isGameOver: boolean;
+  score: number;
+  turns?: number;
+  stats?: PowerUpUsageStatsType;
+  bestScore?: number;
+  resetGame?: () => void;
 }
 
 function InGameHeader(
-  { isGameOver, score, resetGame }: InGameHeaderPropTypes
+  { isGameOver, score, bestScore, resetGame }: PropTypes
 ): React.JSX.Element {
   return (
     <div className={`
@@ -36,26 +41,21 @@ function InGameHeader(
       <div className="flex flex-col gap-2 items-end">
         <div className="flex flex-row gap-2">
           <StatBlock label={"Score"} value={score}/>
-          <StatBlock label={"Best"} value={score}/>
+          <StatBlock label={"Best"} value={bestScore!}/>
         </div>
-        <Button txt={"New Game"} onClick={resetGame}/>
+        <Button txt={"New Game"} onClick={resetGame!}/>
       </div>
 
     </div>
   )
 }
 
-interface GameOverHeaderPropTypes {
-  isGameOver: boolean;
-  score: number;
-  turns: number;
-  stats: PowerUpUsageStatsType;
-}
+
 
 function GameOverHeader(
-  { isGameOver, score, turns, stats }: GameOverHeaderPropTypes
+  { isGameOver, score, turns, stats }: PropTypes
 ): React.JSX.Element {
-  const powerUpsUsed = Object.values(stats).reduce((sum, val) => sum + val, 0);
+  const powerUpsUsed = Object.values(stats!).reduce((sum, val) => sum + val, 0);
   return(
     <div
       className={`
@@ -76,7 +76,7 @@ function GameOverHeader(
       </h1>
       <div>
         <span className="text-md text-stone-100">
-          {score.toLocaleString()} points scored in {turns.toLocaleString()} moves.{" "}
+          {score.toLocaleString()} points scored in {turns!.toLocaleString()} moves.{" "}
         </span>
         <span className="text-md font-bold text-stone-100">
         {powerUpsUsed === 0
@@ -86,23 +86,14 @@ function GameOverHeader(
         </span>
 
       </div>
-      <PowerUpUsageStats stats={stats} />
+      <PowerUpUsageStats stats={stats!} />
     </div>
 
   );
 }
 
-
-interface GameHeaderPropTypes {
-  isGameOver: boolean;
-  score: number;
-  turns: number;
-  stats: PowerUpUsageStatsType;
-  resetGame: () => void;
-}
-
 function GameHeader(
-  { isGameOver, score, turns, stats, resetGame }: GameHeaderPropTypes
+  { isGameOver, score, bestScore, turns, stats, resetGame }: PropTypes
 ): React.JSX.Element {
   return (
     <>
@@ -115,6 +106,7 @@ function GameHeader(
       <InGameHeader
         isGameOver={isGameOver}
         score={score}
+        bestScore={bestScore}
         resetGame={resetGame}
       />
     </>
