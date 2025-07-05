@@ -35,7 +35,7 @@ function GameContainer(
   useEffect(() => {
     limitInput.current = true;
     if (gameState[gameState.length - 1].isGameOver) return;
-    const timeOutId = setTimeout(() => (limitInput.current = false), 300);
+    const timeOutId = setTimeout(() => (limitInput.current = false), 150);
     return () => clearTimeout(timeOutId);
   }, [gameState])
 

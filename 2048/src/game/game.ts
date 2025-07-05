@@ -238,8 +238,9 @@ export function undoMove(game: Game): Game {
   if (game.length > 1 && numberUndos > 0) {
     const nextState = deepCopy(game);
     nextState.pop();
-    nextState.at(-1)!.powerups.undos = (numberUndos - 1) as 0 | 1
-    nextState.at(-1)!.turn = currentTurn
+    nextState.at(-1)!.powerups.undos = (numberUndos - 1) as 0 | 1;
+    nextState.at(-1)!.turn = currentTurn;
+    nextState.at(-1)!.powerUpUsage.undos += 1;
     return nextState
   }
   return game
