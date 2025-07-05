@@ -17,33 +17,20 @@ interface PropTypes {
 }
 
 function InGameHeader(
-  { isGameOver, score, bestScore, resetGame }: PropTypes
+  { isGameOver, score, bestScore }: PropTypes
 ): React.JSX.Element {
   return (
     <div className={`
-      flex flex-row items-start w-72 mx-auto mb-4 gap-6 xs:w-96 xs:gap-4
-       xl:w-136 xl:gap-64 transition-all duration-800 ease-in-out
+      flex flex-col items-end w-72 mx-auto mb-4 gap-1 xs:w-96 xs:gap-4
+       xl:w-136 transition-all duration-800 ease-in-out
       ${!isGameOver
         ? "opacity-100 max-h-40 scale-100"
         : "opacity-0 max-h-0 scale-0"
       }
     `}>
-
-      <div>
-        <h1 className="text-4xl xs:text-6xl font-extrabold text-stone-100">
-          2048
-        </h1>
-        <p className="text-sm text-stone-300 leading-snug mt-1">
-          Join the numbers and get to the 2048 tile!
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-2 items-end">
-        <div className="flex flex-row gap-2">
-          <StatBlock label={"Score"} value={score}/>
-          <StatBlock label={"Best"} value={bestScore!}/>
-        </div>
-        <Button txt={"New Game"} onClick={resetGame!}/>
+      <div className="flex flex-row gap-6">
+        <StatBlock label={"Score"} value={score}/>
+        <StatBlock label={"Best"} value={bestScore!}/>
       </div>
 
     </div>
