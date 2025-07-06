@@ -6,7 +6,7 @@ import type { Game } from "@/game/types";
 interface PropTypes {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>
-  resetGame?: () => void;
+  resetGame: () => void;
 }
 
 
@@ -24,7 +24,7 @@ function PowerUpContainer(
       }
     `}>
       <UndoButton gameState={gameState} changeGameState={changeGameState}/>
-      <RestartGameButton resetGame={resetGame!} />
+      <RestartGameButton resetGame={resetGame} />
     </div>
   );
 }
