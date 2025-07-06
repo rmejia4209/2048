@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CancelIcon from "../icons/CancelIcon";
 
 function Uses({ numOfUses }: { numOfUses: number;}): React.JSX.Element {
@@ -48,6 +48,15 @@ function PowerUp(props: PowerUpProps): React.JSX.Element {
       props.action();
     }
   }
+
+  useEffect(() => {
+    if (isActive) {
+      window.dispatchEvent(new CustomEvent("pause-inputs", { detail: true }));
+    } else {
+      window.dispatchEvent(new CustomEvent("pause-inputs", { detail: false }));
+    }
+    return;
+  }, [isActive])
 
   const calcColorWay = () => {
     switch(buttonType) {
