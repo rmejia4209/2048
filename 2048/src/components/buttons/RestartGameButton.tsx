@@ -5,11 +5,18 @@ import RestartIcon from "@/components/icons/RestartIcon";
 import Button from "@/components/base/Button";
 
 import { useFocusBackground } from "@/components/context/FocusBackground";
+import { useState } from "react";
 
 
-function Modal({ resetGame }: { resetGame : () => void; }): React.JSX.Element {
+type ModalPropTypes = {
+  isActive: boolean;
+  toggleModalOff: () => void;
+  confirmReset: () => void;
+}
 
-  const { inFocus, setInFocus } = useFocusBackground()
+function Modal(props: ModalPropTypes): React.JSX.Element {
+
+  const { isActive, toggleModalOff, confirmReset } = props
 
   return createPortal(
     <div
@@ -17,7 +24,7 @@ function Modal({ resetGame }: { resetGame : () => void; }): React.JSX.Element {
         fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
         bg-neutral-800 rounded-2xl w-88 xs:w-112 h-fit flex flex-col gap-6
         text-center p-6 overflow-x-auto transition-all duration-700 ease-in-out
-        ${inFocus ? "opacity-100 scale-100 z-20" : "opacity-0 scale-90 -z-20"}
+        ${isActive ? "opacity-100 scale-100 z-20" : "opacity-0 scale-90 -z-20"}
       `}
     >
       <div className="flex flex-col gap-2">
@@ -31,12 +38,9 @@ function Modal({ resetGame }: { resetGame : () => void; }): React.JSX.Element {
         <Button
           txt={"Start New Game"}
           type="destructive"
-          onClick={()=>{
-            resetGame();
-            setInFocus(false);
-          }}
+          onClick={confirmReset}
         />
-        <Button txt={"Cancel"} onClick={() => setInFocus(false)}/>
+        <Button txt={"Cancel"} onClick={toggleModalOff}/>
       </div>
     </div>, document.body
   );
@@ -46,17 +50,39 @@ function Modal({ resetGame }: { resetGame : () => void; }): React.JSX.Element {
 function RestartGameButton(
   { resetGame }: {resetGame : () => void;}
 ):React.JSX.Element {
+
+    const [isActive, setIsActive] = useState(false);
     const { setInFocus } = useFocusBackground()
+
+    const toggleModalOn = () => {
+      setIsActive(true);
+      setInFocus(true);
+    }
+
+    const toggleModalOff = () => {
+      setInFocus(false);
+      setIsActive(false);
+    }
+
+    const confirmReset = () => {
+      resetGame();
+      setInFocus(false);
+      setIsActive(false);
+    }
 
   return (
     <>
-    <PowerUP
-      Icon={RestartIcon}
-      uses={Infinity}
-      buttonType="destructive"
-      action={() => {setInFocus(true)}}
-    />
-    <Modal resetGame={resetGame}/>
+      <PowerUP
+        Icon={RestartIcon}
+        uses={Infinity}
+        buttonType="destructive"
+        action={toggleModalOn}
+      />
+      <Modal
+        toggleModalOff={toggleModalOff}
+        isActive={isActive}
+        confirmReset={confirmReset}
+      />
     </>
   )
 }

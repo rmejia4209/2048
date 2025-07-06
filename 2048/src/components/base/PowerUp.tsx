@@ -1,20 +1,7 @@
-import { useEffect, useState } from "react";
-import CancelIcon from "../icons/CancelIcon";
+import { useState } from "react";
+import { useFocusBackground } from "../context/FocusBackground";
 
-function Uses({ numOfUses }: { numOfUses: number;}): React.JSX.Element {
-  return (
-    <div className="flex flex-row gap-1">
-      {Array.from({length: 2}, (_, idx) => {
-        return (
-          <div key={idx} className={`
-            w-4 h-1 rounded-4xl
-            ${numOfUses > idx ? "bg-pink-300": "bg-neutral-300"}
-          `}></div>
-        )
-      })}
-    </div>
-  )
-}
+import CancelIcon from "../icons/CancelIcon";
 
 
 
@@ -34,30 +21,40 @@ type FocusableOnly = {
   action?: undefined
 }
 
-type PowerUpProps = BaseProps & (ActionOnly | FocusableOnly)
+type PowerUpProps = BaseProps & (ActionOnly | FocusableOnly);
+
+
+function Uses({ numOfUses }: { numOfUses: number;}): React.JSX.Element {
+  return (
+    <div className="flex flex-row gap-1">
+      {Array.from({length: 2}, (_, idx) => {
+        return (
+          <div key={idx} className={`
+            w-4 h-1 rounded-4xl
+            ${numOfUses > idx ? "bg-pink-300": "bg-neutral-300"}
+          `}></div>
+        )
+      })}
+    </div>
+  )
+}
+
 
 function PowerUp(props: PowerUpProps): React.JSX.Element {
 
   const {Icon, uses, buttonType } = props
   const [isActive, setIsActive] = useState(false);
+  const { setInFocus } = useFocusBackground()
 
   const actionWrapper = () => {
+    if (isActive) return;
     if ("focusable" in props && props.focusable) {
+      setInFocus(true);
       setIsActive(true);
     } else {
       props.action();
     }
   }
-
-  // Remove when back drop is added here
-  useEffect(() => {
-    if (isActive) {
-      window.dispatchEvent(new CustomEvent("pause-inputs", { detail: true }));
-    } else {
-      window.dispatchEvent(new CustomEvent("pause-inputs", { detail: false }));
-    }
-    return;
-  }, [isActive])
 
   const calcColorWay = () => {
     switch(buttonType) {
@@ -75,7 +72,9 @@ function PowerUp(props: PowerUpProps): React.JSX.Element {
         `)
     }
   }
-
+  /**
+   * Stacking context is broken...
+   */
   return (
     <div className="relative">
       <div className="flex flex-col items-center w-max mx-auto gap-1.5">
@@ -86,7 +85,7 @@ function PowerUp(props: PowerUpProps): React.JSX.Element {
           flex items-center justify-center size-12 xs:size-12 xl:size-14 
           rounded-xl shadow-md shadow-black/30 transform transition-all
           duration-150 ease-in-out focus:outline-none ${calcColorWay()} 
-          ${isActive ? "-translate-y-7" : ""}
+          ${isActive ? "-translate-y-7 z-30" : ""}
         `}
         onClick={actionWrapper}
       >
@@ -101,9 +100,12 @@ function PowerUp(props: PowerUpProps): React.JSX.Element {
           className={`
             absolute top-1/2 left-1/2 -translate-x-1/2 transition-all
             ease-in-out duration-150 active:scale-90
-            ${isActive ? "opacity-80 z-10" : "opacity-0 -z-10"}
+            ${isActive ? "opacity-80 z-30" : "opacity-0 -z-10"}
           `}
-          onClick={() => setIsActive(false)}
+          onClick={() => {
+            setIsActive(false);
+            setInFocus(false);
+          }}
           >
             <CancelIcon/>
         </button>

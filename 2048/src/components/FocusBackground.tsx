@@ -4,7 +4,7 @@ import { useFocusBackground } from "./context/FocusBackground";
 
 function FocusBackground(): React.JSX.Element {
 
-  const {inFocus, setInFocus} = useFocusBackground();
+  const { inFocus } = useFocusBackground();
   const [isBehind, setIsBehind] = useState(true);
   const animationDuration = 700 //ms. // figure out later
 
@@ -28,13 +28,12 @@ function FocusBackground(): React.JSX.Element {
       `}
     >
       <div
-        onClick={() => setInFocus(false)}
         className={`
-          bg-black w-full h-full transition-opacity ease-in-out
+          bg-red-400 w-full h-full transition-opacity ease-in-out
           duration-700 
           ${
             inFocus
-            ? "opacity-70 pointer-events-auto"
+            ? "opacity-30 pointer-events-auto"
             : "opacity-0 pointer-events-none"
           }
           
