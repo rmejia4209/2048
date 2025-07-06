@@ -77,7 +77,7 @@ export function initGame(preferredOrder: number[]): Game {
   ));
   addTile(board, 2, preferredOrder);
   addTile(board, 2, preferredOrder.slice(1));
-  const powerups: PowerUps = {undos: 0}
+  const powerups: PowerUps = {undos: 1}
   const game: Game = [{
     board: board,
     score: 0,

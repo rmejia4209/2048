@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useFocusBackground } from "../context/FocusBackground";
+import { useFocus } from "../context/FocusContext";
 
+import Uses from "@/components/base/Uses";
 import CancelIcon from "../icons/CancelIcon";
-
 
 
 type BaseProps = {
@@ -24,67 +24,86 @@ type FocusableOnly = {
 type PowerUpProps = BaseProps & (ActionOnly | FocusableOnly);
 
 
-function Uses({ numOfUses }: { numOfUses: number;}): React.JSX.Element {
+
+function CancelButton(
+  { isActive, action }: { isActive: boolean; action: () => void; }
+): React.JSX.Element 
+{
   return (
-    <div className="flex flex-row gap-1">
-      {Array.from({length: 2}, (_, idx) => {
-        return (
-          <div key={idx} className={`
-            w-4 h-1 rounded-4xl
-            ${numOfUses > idx ? "bg-pink-300": "bg-neutral-300"}
-          `}></div>
-        )
-      })}
-    </div>
+    <button
+      className={`
+        absolute top-1/2 left-1/2 -translate-x-1/2 transition-all ease-in-out
+        duration-150 active:scale-90
+        ${isActive ? "opacity-80 z-30" : "opacity-0 -z-10"}
+      `}
+      onClick={action}
+      >
+        <CancelIcon/>
+    </button>
+
   )
 }
-
 
 function PowerUp(props: PowerUpProps): React.JSX.Element {
 
   const {Icon, uses, buttonType } = props
   const [isActive, setIsActive] = useState(false);
-  const { setInFocus } = useFocusBackground()
+  const { inFocus, setInFocus } = useFocus()
 
   const actionWrapper = () => {
     if (isActive) return;
     if ("focusable" in props && props.focusable) {
-      setInFocus(true);
       setIsActive(true);
+      setInFocus(true);
     } else {
       props.action();
     }
   }
 
+  const unFocus = () => {
+    setInFocus(false);
+    setIsActive(false);
+  }
+
+  const isDisabled = (uses === 0) || (inFocus && !isActive)
+
+
   const calcColorWay = () => {
     switch(buttonType) {
       case "destructive":
-        return "bg-red-800 hover:bg-red-900 focus:bg-red-900"
+        return (`
+          hover:bg-red-900 focus-visiible:bg-red-900 active:scale-95
+          ${
+            isDisabled
+            ? "bg-red-900 opacity-40"
+            : "bg-red-800 hover:cursor-pointer "
+          }
+
+        `)
       default:
         return (`
           hover:bg-neutral-700 focus-visible:bg-neutral-700
           ${isActive ? "bg-neutral-700" : ""}
           ${
-            uses === 0
-            ? "bg-neutral-700 opacity-40 cursor-not-allowed"
+            isDisabled
+            ? "bg-neutral-700 opacity-40"
             : "bg-neutral-600 hover:cursor-pointer active:scale-95"
           }
         `)
     }
   }
-  /**
-   * Stacking context is broken...
-   */
+
+
   return (
     <div className="relative">
       <div className="flex flex-col items-center w-max mx-auto gap-1.5">
       <button
         aria-label="Undo"
-        disabled={uses === 0 ? true : false}
+        disabled={isDisabled}
         className={`
           flex items-center justify-center size-12 xs:size-12 xl:size-14 
           rounded-xl shadow-md shadow-black/30 transform transition-all
-          duration-150 ease-in-out focus:outline-none ${calcColorWay()} 
+          duration-300 ease-in-out focus:outline-none ${calcColorWay()} 
           ${isActive ? "-translate-y-7 z-30" : ""}
         `}
         onClick={actionWrapper}
@@ -95,24 +114,9 @@ function PowerUp(props: PowerUpProps): React.JSX.Element {
     </div>
     {
       "focusable" in props && props.focusable
-      ? (    
-        <button
-          className={`
-            absolute top-1/2 left-1/2 -translate-x-1/2 transition-all
-            ease-in-out duration-150 active:scale-90
-            ${isActive ? "opacity-80 z-30" : "opacity-0 -z-10"}
-          `}
-          onClick={() => {
-            setIsActive(false);
-            setInFocus(false);
-          }}
-          >
-            <CancelIcon/>
-        </button>
-      )
+      ? <CancelButton isActive={isActive} action={unFocus}/>
       : null
     }
-
     </div>
 
   );

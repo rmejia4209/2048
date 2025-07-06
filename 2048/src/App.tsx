@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import useLocalStorage from "./hooks/useLocalStorage";
 
-import { FocusBackgroundProvider } from "./components/context/FocusBackground";
-import FocusBackground from "./components/FocusBackground";
+import { FocusProvider } from "./components/context/FocusContext";
 import GameHeader from "./components/GameHeader";
 import GameContainer from './components/Game'
 import GameFooter from "./components/GameFooter";
@@ -34,7 +33,7 @@ function App(): React.JSX.Element {
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
-      <FocusBackgroundProvider>
+      <FocusProvider>
           <GameHeader
           isGameOver={currentFrame.isGameOver}
           score={currentFrame.score}
@@ -51,8 +50,7 @@ function App(): React.JSX.Element {
           gameState={gameState}
           changeGameState={changeGameState}
         />
-        {<FocusBackground/>}
-      </FocusBackgroundProvider>
+      </FocusProvider>
     </div>
   )
 }
