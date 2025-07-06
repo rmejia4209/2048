@@ -96,7 +96,7 @@ function RestartGameButton(
     <PowerUP
       Icon={RestartIcon}
       uses={Infinity}
-      type="destructive"
+      buttonType="destructive"
       action={() => setIsOpen(true)}
     />
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} resetGame={resetGame}/>
