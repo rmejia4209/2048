@@ -1,6 +1,5 @@
 import UndoButton from "@/components/buttons//UndoButton";
 import RestartGameButton from "@/components/buttons/RestartGameButton"
-
 import type { Game } from "@/game/types";
 import SwapButton from "../buttons/SwapButton";
 

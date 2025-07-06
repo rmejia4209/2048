@@ -49,6 +49,7 @@ function PowerUp(props: PowerUpProps): React.JSX.Element {
     }
   }
 
+  // Remove when back drop is added here
   useEffect(() => {
     if (isActive) {
       window.dispatchEvent(new CustomEvent("pause-inputs", { detail: true }));
