@@ -1,22 +1,16 @@
 import PowerUpUsageStats from "./containers/PowerUpUsageStats";
 import StatBlock from "./base/StatBlock";
 
-import type {PowerUpUsageStats as PowerUpUsageStatsType} from "../game/types";
+import { useGameContext } from "./context/GameContext";
 
 
 
-interface PropTypes {
-  isGameOver: boolean;
-  score: number;
-  turns?: number;
-  stats?: PowerUpUsageStatsType;
-  bestScore?: number;
-  resetGame?: () => void;
-}
+function InGameHeader({ bestScore }: { bestScore: number}): React.JSX.Element {
 
-function InGameHeader(
-  { isGameOver, score, bestScore }: PropTypes
-): React.JSX.Element {
+  const { gameState } = useGameContext();
+  const score = gameState.at(-1)!.score;
+  const isGameOver = gameState.at(-1)!.isGameOver
+
   return (
     <div className={`
       flex flex-col items-end w-72 mx-auto mb-4 gap-1 xs:w-96 xs:gap-4
@@ -37,16 +31,22 @@ function InGameHeader(
 
 
 
-function GameOverHeader(
-  { isGameOver, score, turns, stats }: PropTypes
-): React.JSX.Element {
-  const powerUpsUsed = Object.values(stats!).reduce((sum, val) => sum + val, 0);
+function GameOverHeader(): React.JSX.Element {
+
+  const { gameState } = useGameContext()
+  const currentFrame = gameState.at(-1)!
+
+  const powerUpsUsed = Object.values(currentFrame.powerUpUsage).reduce(
+    (sum, i) => sum + i, 0
+  );
+  const score = currentFrame.score
+
   return(
     <div
       className={`
         flex flex-col items-center w-full mx-auto gap-2 xs:w-120 xl:w-164
         transition-all duration-800 ease-in-out overflow-hidden
-        ${isGameOver
+        ${currentFrame.isGameOver
           ? "opacity-100 scale-100 max-h-80"
           : "opacity-0 scale-0 max-h-0"
         }
@@ -61,7 +61,7 @@ function GameOverHeader(
       </h1>
       <div>
         <span className="text-md text-stone-100">
-          {score.toLocaleString()} points scored in {turns!.toLocaleString()} moves.{" "}
+          {score.toLocaleString()} points scored in {currentFrame.turn.toLocaleString()} moves.{" "}
         </span>
         <span className="text-md font-bold text-stone-100">
         {powerUpsUsed === 0
@@ -71,29 +71,17 @@ function GameOverHeader(
         </span>
 
       </div>
-      <PowerUpUsageStats stats={stats!} />
+      <PowerUpUsageStats/>
     </div>
 
   );
 }
 
-function GameHeader(
-  { isGameOver, score, bestScore, turns, stats, resetGame }: PropTypes
-): React.JSX.Element {
+function GameHeader({ bestScore }: { bestScore: number}): React.JSX.Element {
   return (
     <>
-      <GameOverHeader
-        isGameOver={isGameOver}
-        score={score}
-        turns={turns}
-        stats={stats}
-      />
-      <InGameHeader
-        isGameOver={isGameOver}
-        score={score}
-        bestScore={bestScore}
-        resetGame={resetGame}
-      />
+      <GameOverHeader/>
+      <InGameHeader bestScore={bestScore}/>
     </>
   )
 }

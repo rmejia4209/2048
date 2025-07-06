@@ -84,7 +84,7 @@ export function initGame(preferredOrder: number[]): Game {
     turn: 0,
     powerups: powerups,
     isGameOver: false,
-    powerUpUsage: {undos: 0}
+    powerUpUsage: {undos: 2}
   }];
   
   return game;
@@ -223,6 +223,7 @@ export function move(
     nextState.turn += 1;
     gameCopy.push(nextState);
     isGameOver(gameCopy);
+    nextState.isGameOver=true
     if (gameCopy.length === 5) gameCopy.shift();
     return gameCopy;
   };

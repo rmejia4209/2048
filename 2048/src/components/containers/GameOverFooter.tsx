@@ -1,18 +1,15 @@
+
 import Button from "@/components/base/Button";
 
-import type { Game } from "@/game/types";
 import { undoMove } from "@/game/game";
+import { useGameContext } from "../context/GameContext";
 
 
-interface PropTypes {
-  gameState: Game;
-  changeGameState: React.Dispatch<React.SetStateAction<Game>>
-  resetGame: () => void;
-}
 
-function GameOverFooter(
-  {gameState, changeGameState, resetGame}: PropTypes
-): React.JSX.Element {
+function GameOverFooter({ resetGame }: { resetGame: () => void; }): React.JSX.Element {
+
+  const { gameState, changeGameState } = useGameContext();
+
   const numUndos = gameState.at(-1)!.powerups.undos
   return (
     <div className="relative h-fit">
@@ -34,7 +31,7 @@ function GameOverFooter(
           <Button
             className="flex-1 text-lg"
             txt="New Game"
-            onClick={resetGame!}
+            onClick={resetGame}
           />
 
           {numUndos > 0

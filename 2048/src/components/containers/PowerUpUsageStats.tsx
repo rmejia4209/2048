@@ -1,5 +1,6 @@
 import UndoIcon from "../icons/UndoIcon";
-import type { PowerUpUsageStats as PowerUpUsageStatsType } from "../../game/types";
+import { useGameContext } from "../context/GameContext";
+
 
 function Uses({ numUses }: { numUses: number }): React.JSX.Element {
 
@@ -21,7 +22,7 @@ function Uses({ numUses }: { numUses: number }): React.JSX.Element {
 function PowerUPStat(
   { Icon, numUses }: { Icon: React.FC; numUses: number }
 ): React.JSX.Element {
-
+  
   return (
     numUses > 0
       ? (
@@ -45,10 +46,14 @@ function PowerUPStat(
 
 
 
-export default function PowerUpUsageStats({stats}: {stats: PowerUpUsageStatsType}): React.JSX.Element {
+export default function PowerUpUsageStats(): React.JSX.Element {
+  
+  const { gameState } = useGameContext();
+  const currentFrame = gameState.at(-1)!
+  
   return (
     <div className="flex flex-row gap-6">
-      <PowerUPStat Icon={UndoIcon} numUses={stats.undos}/>
+      <PowerUPStat Icon={UndoIcon} numUses={currentFrame.powerUpUsage.undos}/>
     </div>
   )
 }

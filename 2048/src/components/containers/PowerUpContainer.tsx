@@ -1,18 +1,13 @@
 import UndoButton from "@/components/buttons//UndoButton";
 import RestartGameButton from "@/components/buttons/RestartGameButton"
-import type { Game } from "@/game/types";
 import SwapButton from "../buttons/SwapButton";
-
-interface PropTypes {
-  gameState: Game;
-  changeGameState: React.Dispatch<React.SetStateAction<Game>>
-  resetGame: () => void;
-}
+import { useGameContext } from "../context/GameContext";
 
 
-function PowerUpContainer(
-  { gameState, changeGameState, resetGame }: PropTypes
-): React.JSX.Element {
+function PowerUpContainer({ resetGame }: { resetGame: () => void; }): React.JSX.Element {
+
+  const { gameState } = useGameContext();
+
   return (
     <div className={`
       flex flex-row justify-center gap-4 items-start mt-8 bg-neutral-500
@@ -23,8 +18,8 @@ function PowerUpContainer(
         : "opacity-0 max-h-0 scale-0"
       }
     `}>
-      <UndoButton gameState={gameState} changeGameState={changeGameState}/>
-      <SwapButton gameState={gameState} changeGameState={changeGameState}/>
+      <UndoButton/>
+      <SwapButton/>
       <RestartGameButton resetGame={resetGame} />
     </div>
   );

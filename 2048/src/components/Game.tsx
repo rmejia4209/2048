@@ -2,19 +2,14 @@ import { useEffect, useRef } from "react";
 import Background from "./Background";
 import Tiles from "./Tiles";
 
-import type { Game } from "../game/types";
 import { move } from "../game/game";
 import { randInt, shuffledArray } from "../utils/utils";
+import { useGameContext } from "./context/GameContext";
 
-interface GameContainerPropTypes {
-  gameState: Game;
-  changeGameState: React.Dispatch<React.SetStateAction<Game>>;
-}
 
-function GameContainer(
-  {gameState, changeGameState}: GameContainerPropTypes
-): React.JSX.Element {
+function GameContainer(): React.JSX.Element {
 
+  const { gameState, changeGameState } = useGameContext()
   const limitInput = useRef(false);
 
 

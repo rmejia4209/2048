@@ -2,19 +2,15 @@
 import PowerUP from "../base/PowerUp";
 import UndoIcon from "../icons/UndoIcon";
 
-import type { Game } from "../../game/types";
 import { undoMove } from "../../game/game";
+import { useGameContext } from "../context/GameContext";
 
 
-interface UndoButtonPropTypes {
-  gameState: Game;
-  changeGameState: React.Dispatch<React.SetStateAction<Game>>
-}
 
-function UndoButton(
-  { gameState, changeGameState }: UndoButtonPropTypes
-): React.JSX.Element {
 
+function UndoButton(): React.JSX.Element {
+
+  const { gameState, changeGameState } = useGameContext();
   const numUndos = gameState[gameState.length - 1].powerups.undos
 
   return (
