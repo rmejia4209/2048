@@ -17,7 +17,6 @@ export function FocusProvider(
 
   useEffect(() => {
     if (inFocus) {
-      console.log("firing")
       window.dispatchEvent(new CustomEvent("pause-inputs", { detail: true }));
     } else {
       window.dispatchEvent(new CustomEvent("pause-inputs", { detail: false }));

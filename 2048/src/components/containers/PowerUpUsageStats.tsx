@@ -1,4 +1,5 @@
-import UndoIcon from "../icons/UndoIcon";
+import UndoIcon from "@/components/icons/UndoIcon";
+import SwapIcon from "@/components/icons/SwapIcon";
 import { useGameContext } from "../context/GameContext";
 
 
@@ -54,6 +55,8 @@ export default function PowerUpUsageStats(): React.JSX.Element {
   return (
     <div className="flex flex-row gap-6">
       <PowerUPStat Icon={UndoIcon} numUses={currentFrame.powerUpUsage.undos}/>
+      <PowerUPStat Icon={SwapIcon} numUses={currentFrame.powerUpUsage.swaps}/>
+
     </div>
   )
 }

@@ -77,14 +77,14 @@ export function initGame(preferredOrder: number[]): Game {
   ));
   addTile(board, 2, preferredOrder);
   addTile(board, 2, preferredOrder.slice(1));
-  const powerups: PowerUps = {undos: 1}
+  const powerups: PowerUps = { undos: 0, swaps: 0 }
   const game: Game = [{
     board: board,
     score: 0,
     turn: 0,
     powerups: powerups,
     isGameOver: false,
-    powerUpUsage: {undos: 2}
+    powerUpUsage: {undos: 0, swaps: 0}
   }];
   
   return game;
@@ -145,6 +145,9 @@ function addPowerUps(value: number, powerups: PowerUps): void {
   switch (value) {
     case 32:
       powerups.undos += powerups.undos < 2 ? 1 : 0;
+      return;
+    case 128:
+      powerups.swaps += powerups.swaps < 2 ? 1 : 0;
       return;
     default:
       return;
@@ -223,14 +226,14 @@ export function move(
     nextState.turn += 1;
     gameCopy.push(nextState);
     isGameOver(gameCopy);
-    nextState.isGameOver=true
+    //nextState.isGameOver=true
     if (gameCopy.length === 5) gameCopy.shift();
     return gameCopy;
   };
   return game;
 }
 
-
+// TODO: stats not increment correctly - verify and fix
 export function undoMove(game: Game): Game {
   
   let numberUndos = game.at(-1)!.powerups.undos;
@@ -245,4 +248,29 @@ export function undoMove(game: Game): Game {
     return nextState
   }
   return game
+}
+
+export function swapTilesPowerUp(id_1: number, id_2: number, game: Game) {
+
+  if (game.length < 1 || game.at(-1)!.powerups.swaps < 1) return game
+  const nextState = deepCopy(game);
+  const nextFrame = deepCopy(nextState.at(-1)!);
+  // TODO figure out this error proofing
+  const findTile = (id: number): Tile | undefined => {
+    for (let row = 0; row < nextFrame.board.length; row++) {
+      for (let col = 0; col < nextFrame.board.length; col++) {
+        if (nextFrame.board[row][col].id === id) {
+          return nextFrame.board[row][col]
+        }
+      }
+    }
+    return;
+  }
+  swapTiles(findTile(id_1)!, findTile(id_2)!);
+  nextFrame.powerUpUsage.swaps += 1;
+  nextFrame.turn += 1;
+  nextFrame.powerups.swaps -= 1;
+  nextState.push(nextFrame);
+  if (nextState.length === 5) nextState.shift();
+  return nextState
 }

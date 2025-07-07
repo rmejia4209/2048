@@ -13,6 +13,7 @@ function Tiles({ gameState }: {gameState: Game}) {
       {gameState[gameState.length - 1].board.flat().sort(sortById).map(
         (tile) => (
           <Tile
+            id={tile.id}
             key={tile.id}
             row={tile.row}
             col={tile.col}

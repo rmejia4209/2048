@@ -5,9 +5,9 @@ import { useGameContext } from "./context/GameContext";
 
 
 
-function InGameHeader({ bestScore }: { bestScore: number}): React.JSX.Element {
+function InGameHeader(): React.JSX.Element {
 
-  const { gameState } = useGameContext();
+  const { gameState, bestScore } = useGameContext();
   const score = gameState.at(-1)!.score;
   const isGameOver = gameState.at(-1)!.isGameOver
 
@@ -22,7 +22,7 @@ function InGameHeader({ bestScore }: { bestScore: number}): React.JSX.Element {
     `}>
       <div className="flex flex-row gap-6">
         <StatBlock label={"Score"} value={score}/>
-        <StatBlock label={"Best"} value={bestScore!}/>
+        <StatBlock label={"Best"} value={bestScore}/>
       </div>
 
     </div>
@@ -77,11 +77,11 @@ function GameOverHeader(): React.JSX.Element {
   );
 }
 
-function GameHeader({ bestScore }: { bestScore: number}): React.JSX.Element {
+function GameHeader(): React.JSX.Element {
   return (
     <>
       <GameOverHeader/>
-      <InGameHeader bestScore={bestScore}/>
+      <InGameHeader/>
     </>
   )
 }

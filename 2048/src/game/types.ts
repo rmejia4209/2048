@@ -10,7 +10,8 @@ export type Tile = {
 export type Board = Tile[][];
 
 export type PowerUps = {
-  undos: 0 | 1 | 2;
+  undos: 0 | 1 | 2 | typeof Infinity;
+  swaps: 0 | 1 | 2 | typeof Infinity;
 };
 
 export type PowerUpUsageStats = {[K in keyof PowerUps]: number;}

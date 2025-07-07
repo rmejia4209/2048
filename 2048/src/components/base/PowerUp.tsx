@@ -1,29 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFocus } from "../context/FocusContext";
 
 import Uses from "@/components/base/Uses";
 import CancelIcon from "../icons/CancelIcon";
+import { useGameContext } from "../context/GameContext";
 
 
-type BaseProps = {
+type PropTypes = {
   Icon: React.FC;
   uses: number;
   buttonType?: string;
-}
-
-type ActionOnly = {
-  focusable?: false;
+  focusable?: boolean;
   action: () => void;
 }
-
-type FocusableOnly = {
-  focusable: true;
-  action?: undefined
-}
-
-type PowerUpProps = BaseProps & (ActionOnly | FocusableOnly);
-
-
 
 function CancelButton(
   { isActive, action }: { isActive: boolean; action: () => void; }
@@ -44,26 +33,34 @@ function CancelButton(
   )
 }
 
-function PowerUp(props: PowerUpProps): React.JSX.Element {
+function PowerUp(props: PropTypes): React.JSX.Element {
 
-  const {Icon, uses, buttonType } = props
+  const {Icon, uses, buttonType, focusable, action } = props
   const [isActive, setIsActive] = useState(false);
   const { inFocus, setInFocus } = useFocus()
+  const { tileFocus } = useGameContext()
 
   const actionWrapper = () => {
     if (isActive) return;
-    if ("focusable" in props && props.focusable) {
+    if (focusable) {
       setIsActive(true);
       setInFocus(true);
-    } else {
-      props.action();
     }
+      action();
   }
 
   const unFocus = () => {
     setInFocus(false);
     setIsActive(false);
+    action();
   }
+
+  useEffect(() => {
+    if (!tileFocus) {
+      setInFocus(false);
+      setIsActive(false);
+    }
+  }, [tileFocus])
 
   const isDisabled = (uses === 0) || (inFocus && !isActive)
 

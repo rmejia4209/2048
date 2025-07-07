@@ -1,19 +1,24 @@
 
 
 import { useEffect, useState, useRef } from "react";
+import { useGameContext } from "./context/GameContext";
 
 
 interface TilePropsTypes {
+  id: number;
   row: number;
   col: number;
   value: number;
 }
 
-function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
+function Tile({ id, row, col, value }: TilePropsTypes): React.JSX.Element {
 
   const [isAnimating, setIsAnimating] = useState(false);
   const animationDuration = 100;  // ms
-  const prev = useRef(0)
+  const prev = useRef(0);
+
+  const { tileFocus, tileSet, addToTileSet, removeFromTileSet  } = useGameContext();
+
   const determineColor = (value: number) => {
     switch (value) {
       case 2:
@@ -55,6 +60,19 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
       }
     }
 
+  const handleClick = () => {
+    if (!tileFocus) return;
+    else if (!tileSet.has(id)){
+      console.log(`Adding ${id}`)
+      addToTileSet(id);
+    } 
+    else {
+      console.log(`Removing ${id}`)
+
+      removeFromTileSet(id);
+    }
+  }
+
 
   useEffect(() => {
     if (value === prev.current) return;
@@ -94,11 +112,25 @@ function Tile({ row, col, value }: TilePropsTypes): React.JSX.Element {
         transition-all duration-${animationDuration} ease-in-out
         ${isAnimating && value > 0
           ? "scale-125"
-          : (prev.current === 0 ? "scale-0" : "scale-100")
+          : (
+            prev.current === 0
+            ? "scale-0"
+            : (
+              tileFocus
+              ? (
+                tileSet.has(id)
+                ? "scale-115"
+                : "scale-95"
+              )
+              : "scale-100"
+            )
+          )
         }
+        
         ${determineColor(value)}
          font-bold text-center leading-20 xs:leading-24 xl:leading-30
       `}
+      onClick={handleClick}
     >
       {value ? value : ""}
     </div>
