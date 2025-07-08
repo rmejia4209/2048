@@ -1,19 +1,10 @@
-name: Test Deploy Workflow
+name: Simple Test
 
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+on: [push]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Echo test
-        run: echo "Hello from build step"
-
-      - name: Deploy (dummy)
-        run: echo "Deploy step"
+      - run: echo "Step 1"
+      - run: echo "Step 2"
