@@ -14,3 +14,6 @@ jobs:
 
       - name: Step 2
         run: echo "Hello from step 2"
+
+      - name: Step 2
+        run: echo "Is my repo public yet"
