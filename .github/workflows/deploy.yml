@@ -35,8 +35,10 @@ jobs:
         with:
           node-version: lts/*
           cache: 'npm'
+      # TODO: replaced ci with install due to conflict with picomatch package
+      # figure out how to fix this issue later
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Build
         run: npm run build
       - name: Setup Pages
