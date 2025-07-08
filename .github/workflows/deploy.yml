@@ -6,5 +6,11 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - name: Say hi
-        run: echo "Hello world"
+      - name: Step 1
+        run: echo "Hello from step 1"
+
+      - name: Sleep
+        run: sleep 5
+
+      - name: Step 2
+        run: echo "Hello from step 2"
