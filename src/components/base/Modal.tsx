@@ -49,7 +49,7 @@ interface ModalPropTypes {
 }
 
 export default function Modal(
-  { isOpen, setIsOpen, children}: ModalPropTypes
+  { isOpen, children}: ModalPropTypes
 ): React.JSX.Element {
 
   return (

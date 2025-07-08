@@ -9,6 +9,7 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  base: "/2048/",
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
