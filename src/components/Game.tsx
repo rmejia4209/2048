@@ -1,62 +1,50 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Background from "./Background";
 import Tiles from "./Tiles";
 
-import { move } from "../game/game";
-import { randInt, shuffledArray } from "../utils/utils";
 import { useGameContext } from "./context/GameContext";
 
 
 function GameContainer(): React.JSX.Element {
 
-  const { gameState, changeGameState } = useGameContext()
-  const limitInput = useRef(false);
+  const { gameState, attemptMove, limitInput } = useGameContext()
 
+  const start = useRef<[number, number]>([0, 0])
 
-  useEffect(() => {
-    const handleUserInput = (e: KeyboardEvent) => {
-      const acceptedKeys = ["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"]
-      if (acceptedKeys.includes(e.key) && !limitInput.current) {
-        const val = randInt(1, 3) * 2;
-        const preferredOrder = shuffledArray(16);
-        changeGameState((prev) => move(e.key, prev, val, preferredOrder));
-      }
-    }
+  const recordTouchStart = (e: React.TouchEvent) => {
+    start.current = [e.changedTouches[0].clientX, e.changedTouches[0].clientY];
+  }
+
+  const handleSwipe = (e: React.TouchEvent) => {
+    const end = [e.changedTouches[0].clientX, e.changedTouches[0].clientY]
+
+    const deltaX = end[0] - start.current[0];
+    const deltaY = end[1] - start.current[1];
+    let direction: string
     
-    const pauseInput = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      limitInput.current = customEvent.detail;
+    if (Math.abs(deltaY) - Math.abs(deltaX) > 0) {
+      direction = deltaY > 0 ? "down" : "up"
+    } else {
+      direction = deltaX > 0 ? "right" : "left"
     }
-
-    window.addEventListener("keydown", handleUserInput);
-    window.addEventListener("pause-inputs", pauseInput);
-    return () => {
-      window.removeEventListener("keydown", handleUserInput);
-      window.removeEventListener("keydown", pauseInput);
-    }
-  }, [])
-
-  useEffect(() => {
-    limitInput.current = true;
-    if (gameState[gameState.length - 1].isGameOver) return;
-    const timeOutId = setTimeout(() => (limitInput.current = false), 150);
-    return () => clearTimeout(timeOutId);
-  }, [gameState])
-
+    if (!limitInput.current) attemptMove(direction);
+  }
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full">
       <div
+        onTouchStart={recordTouchStart}
+        onTouchEnd={handleSwipe}
         className={`
-          relative w-max mx-auto transition-all duration-800 ease-in-out
-          ${gameState.at(-1)!.isGameOver
+          relative w-max mx-auto transition-all duration-800 ease-in-out touch-none
+          ${
+            gameState.at(-1)!.isGameOver
             ? (`
               before:absolute before:inset-0 before:bg-neutral-800
               before:opacity-40 before:z-10 scale-90 origin-top
             `)
             : "scale-100"
           }
-
         `}
       >
         <Background/>

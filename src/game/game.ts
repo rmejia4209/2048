@@ -101,21 +101,25 @@ function* getRowAndCol(
 
   let rowStart: number, colStart: number, direction: number, holdRow: boolean;
   switch (key) {
-      case "ArrowUp":
-        [rowStart, colStart, direction, holdRow] = [0, 0, 1, false];
-        break;
-      case "ArrowLeft":
-        [rowStart, colStart, direction, holdRow] = [0, 0, 1, true];
-        break;
-      case "ArrowDown":
-        [rowStart, colStart, direction, holdRow] = [boardSize-1, 0, -1, false];
-        break;
-      case "ArrowRight":
-        [rowStart, colStart, direction, holdRow] = [0, boardSize-1, -1, true];
-        break;
-      default:
-        // TODO: raise error
-        return;
+    case "up":
+    case "ArrowUp":
+      [rowStart, colStart, direction, holdRow] = [0, 0, 1, false];
+      break;
+    case "left":
+    case "ArrowLeft":
+      [rowStart, colStart, direction, holdRow] = [0, 0, 1, true];
+      break;
+    case "down":
+    case "ArrowDown":
+      [rowStart, colStart, direction, holdRow] = [boardSize-1, 0, -1, false];
+      break;
+    case "right":
+    case "ArrowRight":
+      [rowStart, colStart, direction, holdRow] = [0, boardSize-1, -1, true];
+      break;
+    default:
+      // TODO: raise error
+      return;
     }
     let col = colStart;
     let row = rowStart;

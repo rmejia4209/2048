@@ -15,7 +15,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   background-color: theme("colors.neutral.800");
 
   font-synthesis: none;
@@ -30,10 +30,3 @@ body {
   min-height: 100vh;
 }
 
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-}
