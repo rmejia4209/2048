@@ -57,7 +57,7 @@ export function isGameOver(game: Game): void {
   game.at(-1)!.isGameOver = true;
 }
 
-function addTile(
+export function addTile(
   board:Board, value: number, preferredOrder: number[]
 ): void {
     const [row, col] = getFirstEmptyTile(board, preferredOrder)
@@ -159,7 +159,7 @@ function addPowerUps(value: number, powerups: PowerUps): void {
 
 }
 
-function slide(key: string, board: Board): number {
+export function slide(key: string, board: Board): number {
 
   const emptyTiles: {row: number; col: number;}[] = [];
   let numSwaps = 0;
@@ -178,7 +178,7 @@ function slide(key: string, board: Board): number {
   return numSwaps;
 }
 
-function merge(key: string, board: Board, powerups: PowerUps): number {
+export function merge(key: string, board: Board, powerups?: PowerUps): number {
 
   let mergeTile: {row: number; col: number; tile: Tile}[] = []
   let score = 0;
@@ -192,7 +192,11 @@ function merge(key: string, board: Board, powerups: PowerUps): number {
         )
         board[mergeTile[0].row][mergeTile[0].col].value *= 2;
         score += board[mergeTile[0].row][mergeTile[0].col].value;
-        addPowerUps(board[mergeTile[0].row][mergeTile[0].col].value, powerups)
+        if (powerups) {
+          addPowerUps(
+            board[mergeTile[0].row][mergeTile[0].col].value, powerups
+          );
+        }
         board[row][col].value = 0;
         mergeTile.length = 0;
       } else {

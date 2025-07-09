@@ -6,16 +6,17 @@ import { initGame, move } from "@/game/game";
 import { shuffledArray } from "@/utils/utils";
 
 type GameContext = {
-  bestScore: number;
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>;
+  getLatestState: () => Game
+  bestScore: number;
   limitInput: React.RefObject<boolean>;
   attemptMove: (direction: string) => void;
+  tileFocus: boolean;
+  setTileFocus: React.Dispatch<React.SetStateAction<boolean>>
   tileSet: Set<number>;
   addToTileSet: (id: number) => void;
   emptyTileSet: () => void;
-  tileFocus: boolean;
-  setTileFocus: React.Dispatch<React.SetStateAction<boolean>>
   removeFromTileSet: (id: number) => void;
 }
 
@@ -31,6 +32,7 @@ export function GameContextProvider(
   const [gameState, changeGameState] = useLocalStorage("currentGame",
     () => initGame(randomTileAssignmentOrder)
   );
+  const latestState = useRef(gameState)
   const [bestScore, setBestScore] = useLocalStorage("best", 0);
   const [tileSet, setTileSet] = useState<Set<number>>(new Set());
   const [tileFocus, setTileFocus] = useState(false);
@@ -56,18 +58,21 @@ export function GameContextProvider(
     changeGameState((prev) => move(direction, prev, val, preferredOrder));
   }
 
+  const getLatestState = () => latestState.current
+
   const context = {
     gameState,
     changeGameState,
+    getLatestState,
+    bestScore,
     limitInput,
     attemptMove,
-    bestScore,
+    tileFocus,
+    setTileFocus,
     tileSet,
     addToTileSet,
     emptyTileSet,
-    removeFromTileSet,
-    tileFocus,
-    setTileFocus,
+    removeFromTileSet
   }
 
   // Add event listeners for arrow keys & focus limiter signal
@@ -94,6 +99,7 @@ export function GameContextProvider(
   // Limit input for a moment after a successful move
   useEffect(() => {
     limitInput.current = true;
+    latestState.current = gameState;
     if (gameState.at(-1)!.isGameOver) return;
     const timeOutId = setTimeout(() => (limitInput.current = false), 150);
     return () => clearTimeout(timeOutId);
