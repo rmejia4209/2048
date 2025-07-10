@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 import Button from "../base/Button";
-import RestartIcon from "../icons/RestartIcon";
-import PowerUP from "@/components/base/PowerUp"
 import Modal from "@/components/base/Modal";
 import { useGameContext } from "../context/GameContext";
 
