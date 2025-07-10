@@ -56,7 +56,7 @@ export default function Modal(
     <Backdrop inFocus={isOpen} >
       <dialog
         className={`
-          absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+          absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-md shadow-black/30
           bg-neutral-800 z-20 rounded-2xl w-88 xs:w-112 h-fit flex flex-col gap-6 text-center p-6 overflow-x-auto
           transition-all duration-700 ease-in-out ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-90"}
         `}
