@@ -96,20 +96,27 @@ export function GameContextProvider(
     }
   }, [])
 
+  useEffect(() => {
+    if (tileFocus) {
+      window.dispatchEvent(new CustomEvent("pause-inputs", { detail: true }));
+    } else {
+      emptyTileSet();
+      window.dispatchEvent(new CustomEvent("pause-inputs", { detail: false }));
+    }
+    return;
+  }, [tileFocus])
+
   // Limit input for a moment after a successful move
   useEffect(() => {
     limitInput.current = true;
     latestState.current = gameState;
+    const score = gameState.at(-1)!.score;
+    if (score > bestScore) setBestScore(score);
     if (gameState.at(-1)!.isGameOver) return;
     const timeOutId = setTimeout(() => (limitInput.current = false), 150);
     return () => clearTimeout(timeOutId);
   }, [gameState])
 
-
-  useEffect(() => {
-    const score = gameState.at(-1)!.score;
-    if (score > bestScore) setBestScore(score);
-  }, [gameState])
 
   return (
     <GameContext.Provider value={ context }>
