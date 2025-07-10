@@ -6,7 +6,7 @@ function StatBlock(
 
   return (
     <div className={`
-      flex flex-col items-center bg-neutral-600 rounded-xl w-36 py-2
+      flex flex-col items-center bg-neutral-600 rounded-xl w-36 py-1
     `}>
       <span className="text-xs font-bold tracking-tight text-stone-100">
         {label}
@@ -17,7 +17,7 @@ function StatBlock(
           ${
             value > 1e6
             ? (value > 1e9 ? "text-sm" :"text-lg")
-            : "text-2xl"
+            : "text-xl"
           } 
         `}
       >

@@ -107,8 +107,8 @@ function Tile({ id, row, col, value }: TilePropsTypes): React.JSX.Element {
   return (
     <div
       className={`
-        absolute top-${22*row+2} left-${22*col+2} xs:top-${26*row+2} xs:left-${26*col+2} xl:top-${34*row+4} xl:left-${34*col+4}
-        size-20 xs:size-24 xl:size-30 rounded-2xl
+        absolute top-${20*row+2} left-${20*col+2} xs:top-${26*row+2} xs:left-${26*col+2} xl:top-${34*row+4} xl:left-${34*col+4}
+        size-18 xs:size-24 xl:size-30 rounded-2xl
         transition-all duration-${animationDuration} ease-in-out
         ${isAnimating && value > 0
           ? "scale-125"
@@ -128,7 +128,7 @@ function Tile({ id, row, col, value }: TilePropsTypes): React.JSX.Element {
         }
         
         ${determineColor(value)}
-         font-bold text-center leading-20 xs:leading-24 xl:leading-30
+         font-bold text-center leading-18 xs:leading-24 xl:leading-30
       `}
       onClick={handleClick}
     >
