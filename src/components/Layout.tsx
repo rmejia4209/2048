@@ -14,17 +14,17 @@ function Layout(
 ): React.JSX.Element {
   
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header/>
-      <main className="flex-grow flex flex-col justify-center">
-        <GameContextProvider>
-          <FocusProvider>
-            {children}
-          </FocusProvider>
-        </GameContextProvider>
-      </main>
-      <Credits/>
-    </div>
+    <GameContextProvider>
+      <FocusProvider>
+        <div className="flex flex-col min-h-screen">
+          <Header/>
+            <main className="flex-grow flex flex-col justify-center">  
+              {children}
+            </main>
+          <Credits/>
+        </div>
+      </FocusProvider>
+    </GameContextProvider>
   )
 }
 

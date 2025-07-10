@@ -1,10 +1,9 @@
 import UndoButton from "@/components/buttons//UndoButton";
-import RestartGameButton from "@/components/buttons/RestartGameButton"
 import SwapButton from "../buttons/SwapButton";
 import { useGameContext } from "../context/GameContext";
 
 
-function PowerUpContainer({ resetGame }: { resetGame: () => void; }): React.JSX.Element {
+function PowerUpContainer(): React.JSX.Element {
 
   const { gameState } = useGameContext();
 
@@ -20,7 +19,6 @@ function PowerUpContainer({ resetGame }: { resetGame: () => void; }): React.JSX.
     `}>
       <UndoButton/>
       <SwapButton/>
-      <RestartGameButton resetGame={resetGame} />
     </div>
   );
 }

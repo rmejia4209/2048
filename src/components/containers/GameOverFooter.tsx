@@ -6,9 +6,9 @@ import { useGameContext } from "../context/GameContext";
 
 
 
-function GameOverFooter({ resetGame }: { resetGame: () => void; }): React.JSX.Element {
+function GameOverFooter(): React.JSX.Element {
 
-  const { gameState, changeGameState } = useGameContext();
+  const { gameState, changeGameState, resetGame } = useGameContext();
 
   const numUndos = gameState.at(-1)!.powerups.undos
   return (

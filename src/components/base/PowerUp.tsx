@@ -7,12 +7,11 @@ import Uses from "@/components/base/Uses";
 import { useGameContext } from "../context/GameContext";
 import PowerUpInstruction from "@/components/base/PowerUpInstruction";
 
-
+// TODO remove destructive type...
 
 interface PowerUpButtonPropTypes {
   Icon: React.FC;
   uses: number;
-  buttonType?:string;
   isActive: boolean;
   action: () => void;
 }
@@ -20,32 +19,10 @@ interface PowerUpButtonPropTypes {
 
 function PowerUpButton(props: PowerUpButtonPropTypes): React.JSX.Element {
   
-  const { Icon, uses, buttonType, isActive, action } = props
+  const { Icon, uses, isActive, action } = props
   const { tileFocus } = useGameContext()
 
   const isDisabled = (uses === 0) || (tileFocus && !isActive)
-
-  const calcColorWay = () => {
-    if (buttonType === "destructive") {
-      return (`
-        hover:bg-red-900 focus-visiible:bg-red-900 active:scale-95
-        ${
-          isDisabled
-          ? "bg-red-900 opacity-40"
-          : "bg-red-800 hover:cursor-pointer "
-        }
-      `)
-    }
-    return (`
-      hover:bg-neutral-700 focus-visible:bg-neutral-700
-      ${isActive ? "bg-neutral-700" : ""}
-      ${
-        isDisabled
-        ? "bg-neutral-700 opacity-40"
-        : "bg-neutral-600 hover:cursor-pointer active:scale-95"
-      }
-    `)
-    }
 
   return (
     <div className="flex flex-col items-center w-max mx-auto gap-1.5">
@@ -55,8 +32,14 @@ function PowerUpButton(props: PowerUpButtonPropTypes): React.JSX.Element {
         className={`
           flex items-center justify-center size-12 xs:size-12 xl:size-14 
           rounded-xl shadow-md shadow-black/30 transform transition-all
-          duration-300 ease-in-out focus:outline-none ${calcColorWay()} 
-          ${isActive ? "-translate-y-7 z-30" : ""}
+          duration-300 ease-in-out focus:outline-none
+          hover:bg-neutral-700 focus-visible:bg-neutral-700
+          ${isActive ? "bg-neutral-700 -translate-y-7 z-30" : ""}
+          ${
+            isDisabled
+            ? "bg-neutral-700 opacity-40"
+            : "bg-neutral-600 hover:cursor-pointer active:scale-95"
+          }
         `}
         onClick={action}
       >
@@ -69,32 +52,20 @@ function PowerUpButton(props: PowerUpButtonPropTypes): React.JSX.Element {
 }
 
 
-type DestructivePropTypes = {
-  Icon: React.FC;
-  uses: number;
-  action: () => void;
-  focusable?: boolean;
-  buttonType: "destructive"
-}
-
-type NormalPropTypes = {
+type PowerUpPropTypes = {
   Icon: React.FC;
   power: string;
   uses: number;
   unlockVal: number;
   instructions?: string
-  buttonType?: undefined;
   focusable?: boolean;
   action: () => void;
 }
 
 
-type PowerUpPropTypes = DestructivePropTypes | NormalPropTypes
-
-
 function PowerUp(props: PowerUpPropTypes): React.JSX.Element {
 
-  const {Icon, uses, buttonType, focusable, action } = props
+  const {Icon, uses, power, instructions, focusable, action } = props
   const [isActive, setIsActive] = useState(false);
   const { tileFocus } = useGameContext()
   
@@ -127,32 +98,25 @@ function PowerUp(props: PowerUpPropTypes): React.JSX.Element {
       <PowerUpButton 
         Icon={Icon}
         uses={uses}
-        buttonType={buttonType}
         isActive={isActive}
         action={actionWrapper}
       />
-    {
-      "focusable" in props && props.focusable
-      ? <CancelButton isActive={isActive} action={unFocus}/>
-      : null
-    }
-    {
-      buttonType !== "destructive"
-      && (
-        <ToolTip
+      {
+        "focusable" in props && props.focusable
+        ? <CancelButton isActive={isActive} action={unFocus}/>
+        : null
+      }
+      <ToolTip
           power={props.power}
           uses={props.uses}
           unlockVal={props.unlockVal}
         />
-      )
-    }
     {
-      focusable && buttonType !== "destructive"
-      && (
+      focusable && (
         <PowerUpInstruction
           isActive={isActive}
-          power={props.power}
-          instructions={props.instructions!}
+          power={power}
+          instructions={instructions!}
           unFocus={unFocus}
         />
       )

@@ -18,6 +18,7 @@ type GameContext = {
   addToTileSet: (id: number) => void;
   emptyTileSet: () => void;
   removeFromTileSet: (id: number) => void;
+  resetGame: () => void;
 }
 
 const GameContext = createContext<GameContext | null>(null);
@@ -58,11 +59,17 @@ export function GameContextProvider(
     changeGameState((prev) => move(direction, prev, val, preferredOrder));
   }
 
+  const resetGame = () => {
+    const preferredOrder = shuffledArray(16);
+    changeGameState(() => initGame(preferredOrder))
+  }
+
   const getLatestState = () => latestState.current
 
   const context = {
     gameState,
     changeGameState,
+    resetGame,
     getLatestState,
     bestScore,
     limitInput,

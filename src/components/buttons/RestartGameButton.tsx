@@ -4,6 +4,7 @@ import Button from "../base/Button";
 import RestartIcon from "../icons/RestartIcon";
 import PowerUP from "@/components/base/PowerUp"
 import Modal from "@/components/base/Modal";
+import { useGameContext } from "../context/GameContext";
 
 
 
@@ -43,19 +44,18 @@ function ResetGameModal(
 
 
 
-function RestartGameButton(
-{ resetGame }: { resetGame : () => void; }
-):React.JSX.Element {
+function RestartGameButton():React.JSX.Element {
 
-    const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const { resetGame, gameState } = useGameContext();
 
+  
   return (
     <>
-      <PowerUP
-        Icon={RestartIcon}
-        uses={Infinity}
-        buttonType="destructive"
-        action={() => setIsActive(true)}
+      <Button
+        txt="New Game"
+        onClick={() => setIsActive(true)}
+        isDisabled={gameState.at(-1)!.isGameOver}
       />
       <ResetGameModal
         isOpen={isActive}
