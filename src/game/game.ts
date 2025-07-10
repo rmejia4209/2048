@@ -72,11 +72,11 @@ export function initGame(preferredOrder: number[]): Game {
   const size = 4
   const board: Board = Array.from({ length: size }, (_, row) => (
     Array.from({ length: size}, (_, col) => ({
-      id: ((4*row) + col), value: row === 0 && col === 0 ? 0 : 2**((4*row+col)), row: row, col: col
+      id: ((4*row) + col), value: 0, row: row, col: col
     }))
   ));
-  //addTile(board, 2, preferredOrder);
-  //addTile(board, 2, preferredOrder.slice(1));
+  addTile(board, 2, preferredOrder);
+  addTile(board, 2, preferredOrder.slice(1));
   const powerups: PowerUps = { undos: 0, swaps: 0 }
   const game: Game = [{
     board: board,
