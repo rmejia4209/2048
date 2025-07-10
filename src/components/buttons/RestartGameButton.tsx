@@ -53,7 +53,6 @@ function RestartGameButton(
     <>
       <PowerUP
         Icon={RestartIcon}
-        power="Restart the game"
         uses={Infinity}
         buttonType="destructive"
         action={() => setIsActive(true)}
