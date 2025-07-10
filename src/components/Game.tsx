@@ -21,7 +21,7 @@ function GameContainer(): React.JSX.Element {
     const deltaX = end[0] - start.current[0];
     const deltaY = end[1] - start.current[1];
     let direction: string
-    
+    if (Math.abs(deltaX) < 30 && Math.abs(deltaY) < 30) return;
     if (Math.abs(deltaY) - Math.abs(deltaX) > 0) {
       direction = deltaY > 0 ? "down" : "up"
     } else {
