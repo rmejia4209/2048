@@ -16,7 +16,9 @@ function UndoButton(): React.JSX.Element {
   return (
     <PowerUP
       Icon={UndoIcon}
+      power="Undo"
       uses={numUndos}
+      unlockVal={128}
       action={() => {changeGameState((prev) => undoMove(prev))}}
     />
   )

@@ -39,7 +39,9 @@ function SwapButton(): React.JSX.Element {
   return (
     <PowerUP
       Icon={SwapIcon}
+      power="Swap two tiles"
       uses={numUndos}
+      unlockVal={256}
       focusable={true}
       action={() => setTileFocus((prev) => (!prev))}
     />
