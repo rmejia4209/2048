@@ -1,12 +1,18 @@
 
-import { flatMap, deepCopy } from "../utils/utils";
+import { flatMap, deepCopy, toHexString } from "../utils/utils";
 import type { Board, Tile, Coordinates, Game, PowerUps } from "./types";
+
 
 export function printBoard(board: Board): void {
   for (const row of board) {
     const line = row.map(tile => `${tile.id}-${tile.value}`).join(' | ');
     console.log(line);
   }
+}
+
+
+export function getHexRepresentation(board: Board): string {
+  return toHexString(flatMap(board, (tile) => Math.log2(tile.value)));
 }
 
 

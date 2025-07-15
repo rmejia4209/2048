@@ -25,6 +25,40 @@ function simpleRange(len: number): number[] {
 }
 
 
+export function toHexString(vals: number[]): string {
+
+  return (
+    vals.reduce((prev, curr) => {
+      switch (curr) {
+        case 15:
+          prev += "F";
+          break;
+        case 14:
+          prev += "E";
+          break;
+        case 13:
+          prev += "D";
+          break;
+        case 12:
+          prev += "C";
+          break;
+        case 11:
+          prev += "B";
+          break;
+        case 10:
+          prev += "A";
+          break;
+        default:
+         prev += curr.toString();
+      }
+      return prev;
+    }, "")
+  )
+
+}
+
+
+
  
 /**
  * Returns an array composed of values from 0 to len - 1
