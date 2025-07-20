@@ -12,7 +12,9 @@ export function printBoard(board: Board): void {
 
 
 export function getHexRepresentation(board: Board): string {
-  return toHexString(flatMap(board, (tile) => Math.log2(tile.value)));
+  return toHexString(flatMap(board, (tile) => {
+    return tile.value == 0 ? 0 : Math.log2(tile.value);
+  }));
 }
 
 
@@ -107,18 +109,22 @@ function* getRowAndCol(
 
   let rowStart: number, colStart: number, direction: number, holdRow: boolean;
   switch (key) {
+    case "u":
     case "up":
     case "ArrowUp":
       [rowStart, colStart, direction, holdRow] = [0, 0, 1, false];
       break;
+    case "l":
     case "left":
     case "ArrowLeft":
       [rowStart, colStart, direction, holdRow] = [0, 0, 1, true];
       break;
+    case "d":
     case "down":
     case "ArrowDown":
       [rowStart, colStart, direction, holdRow] = [boardSize-1, 0, -1, false];
       break;
+    case "r":
     case "right":
     case "ArrowRight":
       [rowStart, colStart, direction, holdRow] = [0, boardSize-1, -1, true];
