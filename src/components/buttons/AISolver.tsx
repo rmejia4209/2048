@@ -3,7 +3,8 @@
 import { useGameContext } from "@/components/context/GameContext";
 import Button from "@/components/base/Button";
 import { useState, useRef } from "react";
-import { pureMonteCarloSearch } from "@/game/autoSolver";
+import { getHexRepresentation } from "@/game/game";
+import pmcsNextMove from "@/ai/pmcs";
 
 /**
  * Temp Component to store AI work
@@ -20,8 +21,19 @@ export function AI_Player(): React.JSX.Element {
   const runAI = async () => {
     while (isRunningRef.current) {
       const latestState = getLatestState()
-      const bestMove = pureMonteCarloSearch(latestState.at(-1)!.board);
-      if (!bestMove) break;
+      //const bestMove = pureMonteCarloSearch(latestState.at(-1)!.board);
+      let bestMove: string;
+      try {
+        bestMove = await pmcsNextMove(
+          getHexRepresentation(latestState.at(-1)!.board)
+        );
+
+      } catch (err) {
+        console.error(err);
+        break;
+      }
+    
+      if (bestMove.length === 0) break;
 
       await animateAndApplyMove(bestMove);
     }
@@ -43,11 +55,13 @@ export function AI_Player(): React.JSX.Element {
   }
 
 
-
   return (
-    <Button
-      txt={isRunning ? "Stop" : "Start"}
-      onClick={toggleAI}
+    <div className="flex items-center mt-2 mx-auto">
+      <Button
+        txt={isRunning ? "Stop" : "Start"}
+        onClick={toggleAI}
     />
+    </div>
+    
   )
 }
