@@ -22,12 +22,20 @@ WASM_OUT = $(WEB_OUT_DIR)/wasm_api.js
 all: web_test build_pmcs
 
 # WASM
-web_test: | $(WEB_OUT_DIR)
+web_dev: | $(WEB_OUT_DIR)
 	$(EMCC) $(SRC) \
 		-s EXPORT_ES6=1 \
 		-s EXPORTED_RUNTIME_METHODS='["lengthBytesUTF8", "stringToUTF8", "UTF8ToString"]' \
 		-s EXPORTED_FUNCTIONS='["_malloc", "_free"]' \
 		-o $(WASM_OUT)
+
+web_prod: | $(WEB_OUT_DIR)
+	$(EMCC) $(SRC) \
+		-s EXPORT_ES6=1 -O3 \
+		-s EXPORTED_RUNTIME_METHODS='["lengthBytesUTF8", "stringToUTF8", "UTF8ToString"]' \
+		-s EXPORTED_FUNCTIONS='["_malloc", "_free"]' \
+		-o $(WASM_OUT)
+
 
 $(WEB_OUT_DIR):
 	mkdir -p $(WEB_OUT_DIR)
