@@ -23,7 +23,7 @@ export default function Credits(): React.JSX.Element {
       </p>
       <p>
         Inspired by{' '}
-        <CreditLink link="https://play2048.co/" txt="Github"/>
+        <CreditLink link="https://play2048.co/" txt="the original 2048"/>
       </p>
   </footer>
   )
