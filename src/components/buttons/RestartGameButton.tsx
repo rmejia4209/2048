@@ -22,7 +22,7 @@ function ResetGameModal(
         <h1 className="text-2xl font-bold">New Game</h1>
         <div className="text-sm xs:text-md">
           <p>Are you sure you want to start a new game?</p>
-          <p>All progress will be lost?</p>
+          <p>All progress will be lost.</p>
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -35,7 +35,7 @@ function ResetGameModal(
           }}
         />
         <Button txt={"Cancel"} onClick={() => setIsOpen(false)}/>
-        </div>
+      </div>
     </Modal>
   )
 }
