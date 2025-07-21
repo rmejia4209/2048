@@ -1,6 +1,6 @@
 import PowerUpContainer from "@/components/containers/PowerUpContainer"
 import GameOverFooter from "@/components/containers/GameOverFooter";
-
+import AIPlayer from "@/components/containers/AIMode";
 
 
 function GameFooter(): React.JSX.Element {
@@ -9,6 +9,7 @@ function GameFooter(): React.JSX.Element {
     <>
       <PowerUpContainer/>
       <GameOverFooter/>
+      <AIPlayer/>
     </>
   )
 }
