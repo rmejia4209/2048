@@ -15,13 +15,16 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  EM_VERSION: 4.0.11
+  EM_CACHE_FOLDER: 'emsdk-cache'
+
 # Allow one concurrent deployment
 concurrency:
   group: 'pages'
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -30,6 +33,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Set up cache, install emcc and build wasm files
+      - name: Setup cache
+        id: cache-system-libraries
+        uses: actions/cache@v2
+        with:
+          path: ${{env.EM_CACHE_FOLDER}}
+          key: ${{env.EM_VERSION}}-${{ runner.os }}
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: ${{env.EM_VERSION}}
+          actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
+      - name: Build wasm
+        run: make -C ai web_prod
+      
+      # Set up Node & install dependencies
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
