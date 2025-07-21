@@ -59,7 +59,7 @@ function GameOverHeader(): React.JSX.Element {
       >
         Game Over
       </h1>
-      <div>
+      <div className="flex flex-col items-center">
         <span className="text-md text-stone-100">
           {score.toLocaleString()} points scored in {currentFrame.turn.toLocaleString()} moves.{" "}
         </span>
