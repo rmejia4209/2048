@@ -70,7 +70,7 @@ export default function AIPlayer(): React.JSX.Element {
         />
       </div>
       {/*TODO: connect descriptions to models*/}
-      <span className="text-sm text-stone-100 text-pretty">
+      <span className="text-xs xs:text-sm text-stone-100 text-pretty">
         The pure Monte Carlo search tries stuff at random and picks whatever works best. Pure vibes, no strategy.
       </span>
     </div>
