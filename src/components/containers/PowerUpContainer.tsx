@@ -9,12 +9,12 @@ function PowerUpContainer(): React.JSX.Element {
 
   return (
     <div className={`
-      flex flex-row justify-center gap-4 items-start mt-8 bg-neutral-500
+      flex flex-row justify-center gap-4 items-start bg-neutral-500
       w-72 mx-auto xs:w-96 xl:w-136 rounded-2xl py-2 transition-all
       duration-800 ease-in-out
       ${
         !gameState.at(-1)!.isGameOver && currGameMode === 'power'
-        ? "opacity-100 max-h-40 pointer-events-auto scale-100"
+        ? "opacity-100 max-h-40 pointer-events-auto scale-100 mt-8"
         : "opacity-0 max-h-0 pointer-events-none scale-0"
       }
     `}>

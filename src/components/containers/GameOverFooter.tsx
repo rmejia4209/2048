@@ -18,7 +18,7 @@ function GameOverFooter(): React.JSX.Element {
           absolute flex flex-col -top-12 left-1/2 -translate-x-1/2 w-72 xs:w-96
           xl:w-136 transition-all duration-800 ease-in-out
           ${gameState.at(-1)!.isGameOver
-            ? "opacity-100 max-h-40 scale-100 pointer-events-auto"
+            ? "opacity-100 max-h-40 scale-100 pointer-events-auto mt-8"
             : "opacity-0 max-h-0 scale-0 pointer-events-none"
           }
         `}
