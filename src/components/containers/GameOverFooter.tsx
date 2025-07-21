@@ -8,7 +8,7 @@ import { useGameContext } from "../context/GameContext";
 
 function GameOverFooter(): React.JSX.Element {
 
-  const { gameState, changeGameState, resetGame } = useGameContext();
+  const { gameState, changeGameState, resetGame, currGameMode } = useGameContext();
 
   const numUndos = gameState.at(-1)!.powerups.undos
   return (
@@ -34,18 +34,20 @@ function GameOverFooter(): React.JSX.Element {
             onClick={resetGame}
           />
 
-          {numUndos > 0
-          ? (
-            <Button
-              className="flex-1 text-lg"
-              txt="Undo"
-              onClick={() => {changeGameState((prev) => undoMove(prev))}}
-            />
-          )
-          : null
+          {
+            numUndos > 0 && currGameMode === "power"
+            ? (
+              <Button
+                className="flex-1 text-lg"
+                txt="Undo"
+                onClick={() => {changeGameState((prev) => undoMove(prev))}}
+              />
+            )
+            : null
           }
         </div>
-        {numUndos > 0
+        {
+          numUndos > 0
           ? (
             <span className="text-center self-center m-2 w-full">
               You have {numUndos} undo{numUndos > 1 ? "s " : " "}left.
