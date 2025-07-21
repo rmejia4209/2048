@@ -20,7 +20,9 @@ export default async function pmcsNextMove(hexString: string): Promise<string> {
       throw new Error("WASM malloc failed");
     }
     Module.stringToUTF8(hexString, strPtr, byteLen);
+    //const start = performance.now();
     const bestMove = Module._pmcs_get_next_move(strPtr);
+    //console.log(`Time: ${performance.now() - start}ms`)
     return String.fromCharCode(bestMove);
   } finally {
     Module._free(strPtr);  
