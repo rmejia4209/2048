@@ -16,7 +16,7 @@ function ToolTip(props: ToolTipPropsTypes): React.JSX.Element {
       className={`
         hidden group-hover:block group-data-[active=true]:hidden absolute
         bottom-full left-1/2 -translate-x-1/2 opacity-95 w-max max-w-64 px-4
-        py-3 mb-3 rounded-2xl text-xs bg-neutral-500
+        py-3 mb-3 rounded-2xl text-xs bg-neutral-900
       `}
     >
       <div className="flex mb-1 items-start gap-1 ">
