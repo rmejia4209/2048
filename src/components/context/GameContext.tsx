@@ -5,6 +5,8 @@ import type { Game } from "@/game/types";
 import { initGame, move } from "@/game/game";
 import { shuffledArray } from "@/utils/utils";
 
+export type GameModes = "power" | "ai";
+
 type GameContext = {
   gameState: Game;
   changeGameState: React.Dispatch<React.SetStateAction<Game>>;
@@ -19,6 +21,8 @@ type GameContext = {
   emptyTileSet: () => void;
   removeFromTileSet: (id: number) => void;
   resetGame: () => void;
+  currGameMode: GameModes;
+  setGameMode: React.Dispatch<React.SetStateAction<GameModes>>
 }
 
 const GameContext = createContext<GameContext | null>(null);
@@ -37,6 +41,7 @@ export function GameContextProvider(
   const [bestScore, setBestScore] = useLocalStorage("best", 0);
   const [tileSet, setTileSet] = useState<Set<number>>(new Set());
   const [tileFocus, setTileFocus] = useState(false);
+  const [currGameMode, setGameMode] = useState<GameModes>("power");
   const limitInput = useRef(false);
 
   const addToTileSet = (id: number) => {
@@ -79,7 +84,9 @@ export function GameContextProvider(
     tileSet,
     addToTileSet,
     emptyTileSet,
-    removeFromTileSet
+    removeFromTileSet,
+    currGameMode,
+    setGameMode
   }
 
   // Add event listeners for arrow keys & focus limiter signal
