@@ -7,8 +7,8 @@ import Header from "@/components/Header";
 
 
 
-// TODO - accessiblity features
-
+// TODO - accessibility features
+// TODO - remove Focus provider
 function Layout(
   { children }: { children: React.ReactNode }
 ): React.JSX.Element {
