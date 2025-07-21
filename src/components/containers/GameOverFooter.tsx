@@ -47,7 +47,7 @@ function GameOverFooter(): React.JSX.Element {
           }
         </div>
         {
-          numUndos > 0
+          numUndos > 0 && currGameMode === "power"
           ? (
             <span className="text-center self-center m-2 w-full">
               You have {numUndos} undo{numUndos > 1 ? "s " : " "}left.
@@ -55,7 +55,7 @@ function GameOverFooter(): React.JSX.Element {
           )
           : null
         }
-        </div>
+      </div>
         
       </div>
 
