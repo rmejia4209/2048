@@ -6,8 +6,7 @@ import GameFooter from "./components/GameFooter";
 import Layout from "./components/Layout";
 
 
-
-// TODO - accessiblity features
+// TODO - accessibility features
 
 export default function App(): React.JSX.Element {
   
