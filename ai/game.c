@@ -1,12 +1,13 @@
 
 
-#include "game.h"
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <time.h>
 #include <stdbool.h>
 #include <inttypes.h>
+#include "game.h"
+#include "utilities.h"
 
 #define SIZE 4
 #define CELL_WIDTH 7  
@@ -69,8 +70,8 @@ void add_tile(uint64_t *board) {
     int empty_tiles[16];
     int num_empty = get_empty_tiles(board, empty_tiles);
     // TODO escape if 0
-    int val = rand() % 100 < 90 ? 1 : 2;
-    int empty_tile_pos = (rand() % num_empty);
+    int val = random_int(0, 100) < 90 ? 1 : 2;
+    int empty_tile_pos = random_int(0, num_empty-1);
     set_tile(board, empty_tiles[empty_tile_pos], val);
     return;
 }
@@ -251,4 +252,14 @@ void print_board(uint64_t board, uint64_t score) {
         print_underline();
     }
     return;
+}
+
+uint8_t get_highest_tile(uint64_t board) {
+    
+    uint8_t high_tile = 0;
+    for (int i = 0; i < 16; i++) {
+        uint8_t tile = (board >> (i * 4)) & 0xF;
+        if (tile > high_tile) high_tile = tile;
+    }
+    return high_tile;
 }
