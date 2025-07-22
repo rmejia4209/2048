@@ -82,7 +82,6 @@ char pure_monte_carlo_search(uint64_t board) {
 
 #ifdef COMPILE_AS_EXECUTABLE
 int main() {
-    srand((unsigned int)time(NULL));
     uint64_t board = initBoard();
     uint64_t score = 0;
     clock_t start = clock();
