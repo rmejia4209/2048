@@ -11,6 +11,10 @@
 #define DEBUG 0
 #endif
 
+#ifndef PRINT_HEADER
+#define PRINT_HEADER 0
+#endif
+
 #ifndef NUM_TRIALS
 #define NUM_TRIALS 16
 #endif
@@ -66,18 +70,17 @@ int main(void) {
     double performance =  (end_time - start_time) / (double)NUM_TRIALS;   
     
     #ifdef CSV
-        for (int i == 0; i < NUM_TRIALS; i++) {
-            fprintf(stderr, "%d,", (1 << results[i]));
+        for (int i = 0; i < NUM_TRIALS; i++) {
+            fprintf(stdout, "%d\n", (1 << results[i]));
         }
-    #else 
-        #ifdef PRINT_HEADER
-            fprintf(stderr, "Threads,Trials,Time,Performance\n");
-        #endif
-            fprintf(stderr, "%d,", NUM_THREADS);
-            fprintf(stderr, "%d,", NUM_TRIALS);
-            fprintf(stderr, "%.2lf,", (end_time - start_time));
-            fprintf(stderr, "%.2lf\n", performance);
     #endif
+    #if PRINT_HEADER
+        fprintf(stderr, "Threads,Trials,Time,Performance\n");
+    #endif
+    fprintf(stderr, "%d,", NUM_THREADS);
+    fprintf(stderr, "%d,", NUM_TRIALS);
+    fprintf(stderr, "%.2lf,", (end_time - start_time));
+    fprintf(stderr, "%.2lf\n", performance);
 
     return 0;
 }
