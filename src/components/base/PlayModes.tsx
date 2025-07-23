@@ -60,7 +60,7 @@ export default function PlayModes(
         Icon={RobotIcon}
         mode="ai"
         title="A.I."
-        description="Sit back, crack a beer, and watch A.I. play"
+        description="Sit back, crack open a beer, and watch A.I. play"
         closeMenu={closeMenu}
       />
     </div>
