@@ -7,7 +7,6 @@ import { getHexRepresentation } from "@/game/game";
 import pmcsNextMove from "@/ai/pmcs";
 
 
-
 export default function AIPlayer(): React.JSX.Element {
 
   const { gameState, currGameMode, attemptMove, getLatestState } = useGameContext()
@@ -16,21 +15,27 @@ export default function AIPlayer(): React.JSX.Element {
 
 
   const runAI = async () => {
+    let move_time = 0;
+    let num_moves = 0;
     while (isRunningRef.current) {
       const latestState = getLatestState();
       const hexString = getHexRepresentation(latestState.at(-1)!.board);
       let bestMove: string;
+      const start_time = performance.now()
       try {
         bestMove = await pmcsNextMove(hexString);
       } catch (err) {
         console.error(err);
         break;
       }
-    
+      const end_time = performance.now();
+      move_time += end_time - start_time;
+      num_moves++;
       if (bestMove.length === 0 || latestState.at(-1)!.isGameOver) break;
 
       await animateAndApplyMove(bestMove);
     }
+    console.log(`Average Move Time: ${move_time / num_moves} ms`);
     setIsRunning(false);
     isRunningRef.current = false;
   }
