@@ -6,11 +6,12 @@
 #include <string.h>
 #include <stddef.h>
 #include <time.h>
-#include <omp.h>
+
 #include "utilities.h"
 
 
 #ifdef USE_RAND_R
+#include <omp.h>
 /**
  * Returns a pointer to a seed based on thread number. Use's knuth's
  * constant to better distribute the seeds.
